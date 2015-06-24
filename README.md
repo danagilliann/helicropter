@@ -1,6 +1,6 @@
 # `helicropter` 
 
-> S3 Uploader Cropper for all you uloading and cropping needs
+> S3 Uploader / Cropper for all your uploading and cropping needs
 
 ```
                      .- . _
