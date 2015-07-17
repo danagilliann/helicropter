@@ -13,6 +13,17 @@ define([
 ], function($, Helicropter) {
   'use strict';
 
-  var cropper = new Helicropter({});
+  var cropper = new Helicropter({
+    canvasSize: {
+      width: 432,
+      height: 300
+    },
+    cropSize: {
+      width: 320,
+      height: 250
+    }
+  });
   cropper.render($('.js-cropper'));
+
+  $('.js-force-scale').on('click', function() { cropper.trigger('scale') });
 });

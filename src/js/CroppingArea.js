@@ -14,11 +14,23 @@ export default View.extend({
       height: 300
     });
 
-    this._canvas = new fabric.Canvas(this._$canvas[0]);
+    this._canvas = new fabric.Canvas(this._$canvas[0], {
+      selection: false
+    });
 
     this._createImage();
     this._createCropArea();
     this._createOverlay();
+
+    this.on('scale', (scaleValue) => {
+      if (!scaleValue) { return; }
+
+      console.log(scaleValue);
+
+      this._image.scale(scaleValue).setCoords();
+      this._image.center().setCoords();
+      this._canvas.renderAll();
+    });
   },
 
   _createImage() {
@@ -35,10 +47,20 @@ export default View.extend({
 
       this._canvas.add(this._image);
       this._image.sendToBack();
-      this._image.scale(1.0);
-      this._image.center();
+      this._image.scale(1.0).setCoords();
+      this._image.center().setCoords();
+
+      console.log(320 / this._image.get('width'));
+      console.log(250 / this._image.get('height'));
+
+      this._setScaleStep();
 
       this._image.on('moving', () => this._checkImageBounds());
+
+      this.trigger('image-loaded', {
+        width: this._image.get('width'),
+        height: this._image.get('height')
+      });
     };
     image.src = '/demo/test-kitten.jpeg';
   },
@@ -49,8 +71,8 @@ export default View.extend({
 
     const maxLeftDelta = this._cropArea.get('left');
     const maxTopDelta = this._cropArea.get('top');
-    const minLeftDelta = -this._image.get('width') + (this._cropArea.get('left') + this._cropArea.get('width'));
-    const minTopDelta = -this._image.get('height') + (this._cropArea.get('top') + this._cropArea.get('height'));
+    const minLeftDelta = -this._image.getWidth() + (this._cropArea.get('left') + this._cropArea.get('width'));
+    const minTopDelta = -this._image.getHeight() + (this._cropArea.get('top') + this._cropArea.get('height'));
 
     if (leftDelta > maxLeftDelta) {
       this._image.set('left', maxLeftDelta);
@@ -63,7 +85,6 @@ export default View.extend({
       this._image.set('left', minLeftDelta);
     }
     if (topDelta < minTopDelta) {
-      console.log(minTopDelta);
       this._image.set('top', minTopDelta);
     }
   },
@@ -99,10 +120,7 @@ export default View.extend({
     });
 
     this._canvas.add(this._cropArea);
-    this._cropArea.center();
-    this._cropArea.setCoords();
-
-    console.log(this._cropAreaViewport.get('left'));
+    this._cropArea.center().setCoords();
   },
 
   // -- Points fo figure out where to create
@@ -136,5 +154,12 @@ export default View.extend({
       });
       this._canvas.add(new fabric.Rect(data));
     });
+  },
+
+  _setScaleStep() {
+    const widthRatio = this._cropAreaViewport.get('width') / this._image.get('width');
+    const heightRatio = this._cropAreaViewport.get('height') / this._image.get('height');
+
+    this._scaleStep = (1 - Math.min(widthRatio, heightRatio)) / 100;
   }
 });
