@@ -22,21 +22,13 @@ export default View.extend({
     this._createCropArea();
     this._createOverlay();
 
-    this.on('scale', (scaleValue) => {
-      if (!scaleValue) { return; }
-
-      console.log(scaleValue);
-
-      this._image.scale(scaleValue).setCoords();
-      this._image.center().setCoords();
-      this._canvas.renderAll();
-    });
+    this.on('scale', (scaleValue) => this._scaleImage(scaleValue));
   },
 
   _createImage() {
     const image = new Image();
     image.onload = () => {
-      this._image = new fabric.Image(image, {
+      window._image = this._image = new fabric.Image(image, {
         left: 0,
         top: 0,
         originX: 'left',
@@ -50,11 +42,6 @@ export default View.extend({
       this._image.scale(1.0).setCoords();
       this._image.center().setCoords();
 
-      console.log(320 / this._image.get('width'));
-      console.log(250 / this._image.get('height'));
-
-      this._setScaleStep();
-
       this._image.on('moving', () => this._checkImageBounds());
 
       this.trigger('image-loaded', {
@@ -63,6 +50,37 @@ export default View.extend({
       });
     };
     image.src = '/demo/test-kitten.jpeg';
+  },
+
+  _scaleImage(scaleValue) {
+    if (!scaleValue) { return; }
+
+    const previousDimensions = {
+      width: this._image.getWidth(),
+      height: this._image.getHeight()
+    };
+    const previousCentroid = {
+      left: (this._image.get('left') * -1) + this._cropArea.get('left') + (this._cropArea.getWidth() / 2),
+      top: (this._image.get('top') * -1) + this._cropArea.get('top') + (this._cropArea.getHeight() / 2)
+    };
+
+    this._image.scale(scaleValue).setCoords();
+
+    const postDimensions = {
+      width: this._image.getWidth(),
+      height: this._image.getHeight()
+    };
+    const postCentroid = {
+      left: previousCentroid.left * (postDimensions.width / previousDimensions.width),
+      top: previousCentroid.top * (postDimensions.height / previousDimensions.height)
+    };
+
+    this._image.set('left', this._image.get('left') + (previousCentroid.left - postCentroid.left));
+    this._image.set('top', this._image.get('top') + (previousCentroid.top - postCentroid.top));
+    this._image.setCoords();
+
+    this._checkImageBounds();
+    this._canvas.renderAll();
   },
 
   _checkImageBounds() {
@@ -154,12 +172,5 @@ export default View.extend({
       });
       this._canvas.add(new fabric.Rect(data));
     });
-  },
-
-  _setScaleStep() {
-    const widthRatio = this._cropAreaViewport.get('width') / this._image.get('width');
-    const heightRatio = this._cropAreaViewport.get('height') / this._image.get('height');
-
-    this._scaleStep = (1 - Math.min(widthRatio, heightRatio)) / 100;
   }
 });

@@ -28,6 +28,7 @@ module.exports = [{
     'BeFF/Controller',
     'BeFF/Component',
     'BeFF/View',
+    'BeFF/Component/CloudUploader',
     'nbd/util/extend'
   ],
   module: {

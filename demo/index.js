@@ -3,7 +3,8 @@ require.config({
     helicropter: '../dist/js/helicropter',
     jquery: '../node_modules/jquery/dist/jquery',
     BeFF: '../node_modules/BeFF',
-    nbd: '../node_modules/BeFF/bower_components/nbd'
+    nbd: '../node_modules/BeFF/bower_components/nbd',
+    fineuploader: '../node_modules/BeFF/bower_components/fineuploader/dist'
   }
 });
 
@@ -24,6 +25,4 @@ define([
     }
   });
   cropper.render($('.js-cropper'));
-
-  $('.js-force-scale').on('click', function() { cropper.trigger('scale') });
 });
