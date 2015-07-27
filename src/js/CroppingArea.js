@@ -22,12 +22,25 @@ export default View.extend({
     this._createCropArea();
     this._createOverlay();
 
-    this.on('scale', (scaleValue) => this._scaleImage(scaleValue));
+    this.on({
+      scale(scaleValue) { this._scaleImage(scaleValue); },
+
+      ['set-image'](imageSrc) {
+        this._model.image = imageSrc;
+        this._createImage();
+      }
+    });
   },
 
   _createImage() {
+    if (!this._model.image) { return; }
+
     const image = new Image();
     image.onload = () => {
+      if (this._image) {
+        this._image.remove();
+      }
+
       window._image = this._image = new fabric.Image(image, {
         left: 0,
         top: 0,
@@ -49,7 +62,8 @@ export default View.extend({
         height: this._image.get('height')
       });
     };
-    image.src = '/demo/test-kitten.jpeg';
+
+    image.src = this._model.image;
   },
 
   _scaleImage(scaleValue) {
