@@ -47,6 +47,38 @@ export default View.extend({
 
   rendered() {
     this._uploader = new Uploader(this.$view[0], this._requestOptions);
+
+    this._bindUploader();
+
+    this.on('upload-image', () => this._uploadImage());
+  },
+
+  hide() {
+    this.$view.addClass('hide');
+  },
+
+  show() {
+    this.$view.addClass('hide');
+  },
+
+  _uploadImage() {
+    this._uploader.choose();
+  },
+
+  _bindUploader() {
+    this.listenTo(this._uploader, {
+      submit({ file }) {
+        this.trigger('set-image', file.readerData.result);
+      },
+
+      complete(data) {
+        this.trigger('image-uploaded', `${data.uploadEndpoint}/${data.uploadPath}`);
+      },
+
+      error(err) {
+        console.error(err);
+      }
+    });
   }
 });
 

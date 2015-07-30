@@ -1,7 +1,7 @@
 import Controller from 'BeFF/Controller';
 import View from 'BeFF/View';
 
-// import UploadArea from './UploadArea';
+import UploadArea from './UploadArea';
 import CroppingArea from './CroppingArea';
 import ZoomSlider from './ZoomSlider';
 // import RatioLock from './RatioLock';
@@ -11,16 +11,16 @@ import template from '../templates/wrapper.mustache';
 
 const HelicropterView = View.extend({
   rendered() {
-    // this._uploadArea = new UploadArea({
-    //   request: {
-    //     endpoint: '',
-    //     accessKey: ''
-    //   },
-    //   signature: {
-    //     endpoint: ''
-    //   }
-    // });
-    // this._uploadArea.render(this.$view.find('.js-upload-container'));
+    this._uploadArea = new UploadArea({
+      request: {
+        endpoint: '',
+        accessKey: ''
+      },
+      signature: {
+        endpoint: '/s3handler'
+      }
+    });
+    this._uploadArea.render(this.$view.find('.js-upload-container'));
 
     this._croppingArea = new CroppingArea({
       cropWidth: this._model.get('cropSize').width,
@@ -39,10 +39,13 @@ const HelicropterView = View.extend({
         suggestions: this._model.get('suggestions')
       });
       this._suggestionArea.render(this.$view.find('.js-suggestions'));
+
+      this._croppingArea.relay(this._suggestionArea, 'set-image');
+      this._uploadArea.relay(this._suggestionArea, 'upload-image')
     }
 
     this._croppingArea.relay(this._zoomSlider, 'scale');
-    this._croppingArea.relay(this._suggestionArea, 'set-image');
+    this._croppingArea.relay(this._uploadArea, 'set-image');
     this._zoomSlider.relay(this._croppingArea, 'image-loaded');
   },
 

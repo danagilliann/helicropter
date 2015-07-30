@@ -7,6 +7,7 @@ export default View.extend({
 
   events: {
     click: {
+      '.js-upload-btn': ':upload-image',
       '.js-suggestion-item': '_setImage'
     }
   },
