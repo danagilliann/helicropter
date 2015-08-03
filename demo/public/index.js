@@ -23,6 +23,7 @@ define([
       width: 320,
       height: 250
     },
+    showRatioLock: true,
     showSuggestions: true,
     suggestions: [
       { src: '/imgs/test-kitten.jpeg' },
