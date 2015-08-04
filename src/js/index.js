@@ -21,6 +21,7 @@ const HelicropterView = View.extend({
     this._addSuggestionArea();
 
     this._bindSubsections();
+    this._setInitialState();
   },
 
   getCropData() {
@@ -43,8 +44,6 @@ const HelicropterView = View.extend({
       cropHeight: this._model.get('cropSize').height
     });
     this._croppingArea.render(this.$view.find('.js-crop-container'));
-
-    this._croppingArea.hide();
   },
 
   _addZoomSlider() {
@@ -53,8 +52,6 @@ const HelicropterView = View.extend({
       cropHeight: this._model.get('cropSize').height
     });
     this._zoomSlider.render(this.$view.find('.js-crop-controls'));
-
-    this._zoomSlider.disable();
   },
 
   _addRatioLock() {
@@ -63,8 +60,6 @@ const HelicropterView = View.extend({
         labelText: this._model.get('ratioLockText')
       });
       this._ratioLock.render(this.$view.find('.js-crop-controls'));
-
-      this._ratioLock.disable();
     }
   },
 
@@ -74,6 +69,23 @@ const HelicropterView = View.extend({
         suggestions: this._model.get('suggestions')
       });
       this._suggestionArea.render(this.$view.find('.js-suggestions'));
+    }
+  },
+
+  _setInitialState() {
+    const initialImage = this._model.get('initialImage');
+
+    if (initialImage) {
+      this._url = initialImage;
+      this._croppingArea.trigger('set-image', initialImage);
+      this._enableImageManipulation();
+    }
+    else {
+      this._disableImageManipulation();
+
+      if (this._model.get('showRatioLock')) {
+        this._ratioLock.disable();
+      }
     }
   },
 
