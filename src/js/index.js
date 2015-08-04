@@ -110,14 +110,19 @@ const HelicropterView = View.extend({
 
   _enableImageManipulation() {
     this._uploadArea.hide();
+
     this._croppingArea.show();
+
+    this._zoomSlider.reset();
     this._zoomSlider.enable();
   },
 
   _disableImageManipulation() {
     this._uploadArea.show();
+
     this._croppingArea.reset();
     this._croppingArea.hide();
+
     this._zoomSlider.disable();
   }
 });

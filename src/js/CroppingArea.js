@@ -216,9 +216,6 @@ export default View.extend({
     this._cropArea.lastScaleY = this._cropArea.getScaleY();
   },
 
-  // TODO: Need to draw two objects:
-  // 1. Crop Area with solid borders when the crop area is static
-  // 2. Crop Area with dashed borders and handles when the crop area is dynamic
   _createStaticCropArea() {
     this._cropAreaViewport = new fabric.Rect({
       originX: 'left',
@@ -309,6 +306,7 @@ export default View.extend({
       this._removeOverlay();
       this._createOverlay();
 
+      this._cropArea.bringToFront();
       this._canvas.setActiveObject(this._cropArea);
     });
   },

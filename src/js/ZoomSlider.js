@@ -20,6 +20,10 @@ export default View.extend({
     this._$slider.on('input', () => this.trigger('scale', this._currentScale()));
   },
 
+  reset() {
+    this._$slider.val(100);
+  },
+
   disable() {
     this.$view.addClass('disabled');
     this._$slider.prop('disabled', true);
