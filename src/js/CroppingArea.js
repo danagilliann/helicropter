@@ -122,23 +122,48 @@ export default View.extend({
     const leftDelta = this._image.get('left');
     const topDelta = this._image.get('top');
 
+    const widthBelowScale = this._image.getWidth() < this._cropArea.getWidth();
+    const heightBelowScale = this._image.getHeight() < this._cropArea.getHeight();
+
     const maxLeftDelta = this._cropArea.get('left');
     const maxTopDelta = this._cropArea.get('top');
-    const minLeftDelta = -this._image.getWidth() + (this._cropArea.get('left') + this._cropArea.get('width'));
-    const minTopDelta = -this._image.getHeight() + (this._cropArea.get('top') + this._cropArea.get('height'));
+    const minLeftDelta = -this._image.getWidth() + (this._cropArea.get('left') + this._cropArea.getWidth());
+    const minTopDelta = -this._image.getHeight() + (this._cropArea.get('top') + this._cropArea.getHeight());
 
-    if (leftDelta > maxLeftDelta) {
-      this._image.set('left', maxLeftDelta);
+    if (widthBelowScale) {
+      if (leftDelta < maxLeftDelta) {
+        this._image.set('left', maxLeftDelta);
+      }
+      if (widthBelowScale && leftDelta > minLeftDelta) {
+        this._image.set('left', minLeftDelta);
+      }
     }
-    if (topDelta > maxTopDelta) {
-      this._image.set('top', maxTopDelta);
+    else {
+      if (leftDelta > maxLeftDelta) {
+        this._image.set('left', maxLeftDelta);
+      }
+      if (leftDelta < minLeftDelta) {
+        this._image.set('left', minLeftDelta);
+      }
     }
 
-    if (leftDelta < minLeftDelta) {
-      this._image.set('left', minLeftDelta);
+    if (heightBelowScale) {
+      if (topDelta < maxTopDelta) {
+        this._image.set('top', maxTopDelta);
+      }
+
+      if (topDelta > minTopDelta) {
+        this._image.set('top', minTopDelta);
+      }
     }
-    if (topDelta < minTopDelta) {
-      this._image.set('top', minTopDelta);
+    else {
+      if (topDelta > maxTopDelta) {
+        this._image.set('top', maxTopDelta);
+      }
+
+      if (topDelta < minTopDelta) {
+        this._image.set('top', minTopDelta);
+      }
     }
   },
 
