@@ -15,6 +15,15 @@ define([
   'use strict';
 
   var cropper = new Helicropter({
+    uploaderOptions: {
+      request: {
+        endpoint: '',
+        accessKey: ''
+      },
+      signature: {
+        endpoint: '/s3handler'
+      }
+    },
     canvasSize: {
       width: 432,
       height: 300

@@ -1,3 +1,4 @@
+import extend from 'nbd/util/extend';
 import Controller from 'BeFF/Controller';
 import View from 'BeFF/View';
 
@@ -23,15 +24,8 @@ const HelicropterView = View.extend({
   },
 
   _addUploadArea() {
-    this._uploadArea = new UploadArea({
-      request: {
-        endpoint: '',
-        accessKey: ''
-      },
-      signature: {
-        endpoint: '/s3handler'
-      }
-    });
+    console.log(this._model.get('uploaderOptions'))
+    this._uploadArea = new UploadArea(this._model.get('uploaderOptions'));
     this._uploadArea.render(this.$view.find('.js-upload-container'));
   },
 
@@ -88,6 +82,32 @@ const HelicropterView = View.extend({
 });
 
 const Helicropter = Controller.extend({
+  _defaults: {
+    uploaderOptions: {
+      request: {
+        endpoint: '',
+        accessKey: ''
+      },
+      signature: {
+        endpoint: ''
+      }
+    },
+    canvasSize: {
+      width: 432,
+      height: 300
+    },
+    cropSize: {
+      width: 320,
+      height: 250
+    },
+    showRatioLock: false,
+    showSuggestions: false,
+    suggestions: []
+  },
+
+  init(model) {
+    this._super(extend({}, this._defaults, model));
+  }
 }, {
   VIEW_CLASS: HelicropterView
 });
