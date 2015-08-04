@@ -20,6 +20,16 @@ export default View.extend({
     this._$slider.on('input', () => this.trigger('scale', this._currentScale()));
   },
 
+  disable() {
+    this.$view.addClass('disabled');
+    this._$slider.prop('disabled', true);
+  },
+
+  enable() {
+    this.$view.removeClass('disabled');
+    this._$slider.prop('disabled', false);
+  },
+
   _calculateScaleAttrs(imageDimensions) {
     const widthScaleMin = this._cropWidth / imageDimensions.width;
     const heightScaleMin = this._cropHeight / imageDimensions.height;

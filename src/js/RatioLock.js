@@ -23,6 +23,16 @@ export default View.extend({
     });
   },
 
+  disable() {
+    this.$view.addClass('disabled');
+    this._$ratioCheckbox.prop('disabled', true);
+  },
+
+  enable() {
+    this.$view.removeClass('disabled');
+    this._$ratioCheckbox.prop('disabled', false);
+  },
+
   _toggleRatioLock() {
     this.trigger('ratio-locked', this._$ratioCheckbox.prop('checked'));
   }

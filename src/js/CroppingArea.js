@@ -50,6 +50,31 @@ export default View.extend({
     });
   },
 
+  hide() {
+    this.$view.addClass('hide');
+  },
+
+  show() {
+    this.$view.removeClass('hide');
+  },
+
+  reset() {
+    if (this._image) {
+      this._canvas.remove(this._image);
+      this._image = null;
+    }
+  },
+
+  getCropData() {
+    return {
+      x: (this._image.get('left') * -1) + this._cropArea.get('left'),
+      y: (this._image.get('top') * -1) + this._cropArea.get('top'),
+      width: this._cropArea.getWidth(),
+      height: this._cropArea.getHeight(),
+      scale: this._image.getScaleX()
+    };
+  },
+
   _createImage() {
     if (!this._model.image) { return; }
 
@@ -59,7 +84,7 @@ export default View.extend({
         this._image.remove();
       }
 
-      window._image = this._image = new fabric.Image(image, {
+      this._image = new fabric.Image(image, {
         left: 0,
         top: 0,
         originX: 'left',
@@ -74,7 +99,7 @@ export default View.extend({
       this._image.center().setCoords();
 
       this._image.on('moving', () => {
-        this._checkImageBounds()
+        this._checkImageBounds();
         this._canvas.setActiveObject(this._cropArea);
       });
 
@@ -322,6 +347,7 @@ export default View.extend({
   _removeOverlay() {
     if (this._cropOverlay) {
       this._canvas.remove(this._cropOverlay);
+      this._cropOverlay = null;
     }
   }
 });

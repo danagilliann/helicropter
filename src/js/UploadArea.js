@@ -49,7 +49,6 @@ export default View.extend({
     this._uploader = new Uploader(this.$view[0], this._requestOptions);
 
     this._bindUploader();
-
     this.on('upload-image', () => this._uploadImage());
   },
 
@@ -58,7 +57,7 @@ export default View.extend({
   },
 
   show() {
-    this.$view.addClass('hide');
+    this.$view.removeClass('hide');
   },
 
   _uploadImage() {
@@ -68,11 +67,13 @@ export default View.extend({
   _bindUploader() {
     this.listenTo(this._uploader, {
       submit({ file }) {
+        this.hide();
         this.trigger('set-image', file.readerData.result);
       },
 
       complete(data) {
-        this.trigger('image-uploaded', `${data.uploadEndpoint}/${data.uploadPath}`);
+        this._url = `${data.uploadEndpoint}/${data.uploadPath}`;
+        this.trigger('image-uploaded', this._url);
       },
 
       error(err) {

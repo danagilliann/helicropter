@@ -43,4 +43,6 @@ define([
     ]
   });
   cropper.render($('.js-cropper'));
+
+  window.cropper = cropper;
 });
