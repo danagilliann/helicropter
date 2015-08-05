@@ -39,25 +39,27 @@ const Uploader = CloudUploader.extend({
 export default View.extend({
   mustache: template,
 
-  init(options) {
-    this._requestOptions = options;
-
-    this._super();
-  },
-
   rendered() {
-    this._uploader = new Uploader(this.$view[0], this._requestOptions);
+    this._$container = this.$view.parent();
+
+    this._uploader = new Uploader(this.$view[0], this._model.uploaderOptions);
+
+    console.log(this._model);
+    this._$container.css({
+      width: this._model.width,
+      height: this._model.height
+    });
 
     this._bindUploader();
     this.on('upload-image', () => this._uploadImage());
   },
 
   hide() {
-    this.$view.addClass('hide');
+    this._$container.addClass('hide');
   },
 
   show() {
-    this.$view.removeClass('hide');
+    this._$container.removeClass('hide');
   },
 
   _uploadImage() {
