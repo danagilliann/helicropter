@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "demo",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1.40",
+    "body-parser": "^1.13.2",
+    "crypto": "0.0.3",
+    "express": "^4.13.1"
+  }
+}

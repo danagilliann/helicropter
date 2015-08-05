@@ -1,0 +1,23 @@
+{
+  "name": "helicropter",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Attamusc/helicropter",
+  "authors": [
+    "Sean Dunn <sedunn@adobe.com>"
+  ],
+  "moduleType": [
+    "amd",
+    "es6"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fabric": "~1.5.0"
+  }
+}
