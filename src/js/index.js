@@ -99,7 +99,11 @@ const HelicropterView = View.extend({
     this._zoomSlider.relay(this._croppingArea, 'image-loaded');
 
     this._uploadArea.on('image-uploaded', (url) => this._url = url);
-    this._uploadArea.on('set-image', () => this._enableImageManipulation());
+    this._uploadArea.on('set-image', () => {
+      this._enableImageManipulation()
+      this.trigger('image:uploaded');
+    });
+
     this.on('remove-image', () => this._disableImageManipulation());
 
     if (this._model.get('showRatioLock')) {
@@ -131,6 +135,8 @@ const HelicropterView = View.extend({
 
     this._zoomSlider.reset();
     this._zoomSlider.enable();
+
+    this.trigger('controls:enabled');
   },
 
   _disableImageManipulation() {
@@ -140,6 +146,8 @@ const HelicropterView = View.extend({
     this._croppingArea.hide();
 
     this._zoomSlider.disable();
+
+    this.trigger('controls:disabled');
   }
 });
 
@@ -169,6 +177,8 @@ const Helicropter = Controller.extend({
 
   init(model) {
     this._super(extend({}, this._defaults, model));
+
+    this.relay(this._view, 'controls:enabled controls:disabled image:uploaded');
   },
 
   crop() {
