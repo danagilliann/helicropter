@@ -16,12 +16,11 @@ export default View.extend({
 
   rendered() {
     this._$slider = this.$view.find('.js-scale-slider');
-
     this._$slider.on('input', () => this.trigger('scale', this._currentScale()));
   },
 
   reset() {
-    this._$slider.val(100);
+    this._$slider.val(100).trigger('change');
   },
 
   disable() {
