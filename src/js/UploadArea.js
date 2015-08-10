@@ -44,7 +44,6 @@ export default View.extend({
 
     this._uploader = new Uploader(this.$view[0], this._model.uploaderOptions);
 
-    console.log(this._model);
     this._$container.css({
       width: this._model.width,
       height: this._model.height
