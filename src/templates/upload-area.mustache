@@ -6,6 +6,10 @@
     c-2.8,0-5.1,2.3-5.1,5.1S2.3,39,5.1,39c0.6,0,1.7,0,1.7,0H24V25l-6.6,7l-2.8-2.5L26,18l11.4,11.5L34.5,32L28,25v14h11.5l1.7-0.3
     c3.9-0.8,6.8-4.3,6.8-8.4C48,26.1,45,22.6,41,21.9z"/>
   </svg>
-  <div class="image-upload-text">Upload new cover image</div>
-  <div class="image-upload-subtext">This will not affect your Behance cover image</div>
+  {{#titleText}}
+    <div class="image-upload-text">{{titleText}}</div>
+  {{/titleText}}
+  {{#subtitleText}}
+    <div class="image-upload-subtext">{{subtitleText}}</div>
+  {{/subtitleText}}
 </div>
