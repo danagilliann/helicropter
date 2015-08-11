@@ -32,6 +32,8 @@ define([
       width: 320,
       height: 250
     },
+    //uploadTitle: 'Upload a new cover image',
+    //uploadSubtitle: 'This will not affect your Behance cover image',
     //initialImage: '/imgs/test-kitten.jpeg',
     showRatioLock: true,
     showSuggestions: true,

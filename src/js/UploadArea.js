@@ -37,7 +37,19 @@ const Uploader = CloudUploader.extend({
 });
 
 export default View.extend({
+  _defaults: {
+    titleText: 'Upload Image',
+    subtitleText: ''
+  },
+
   mustache: template,
+
+  templateData() {
+    this._model.titleText = this._model.titleText || this._defaults.titleText;
+    this._model.subtitleText = this._model.subtitleText || this._defaults.subtitleText;
+
+    return this._model;
+  },
 
   rendered() {
     this._$container = this.$view.parent();

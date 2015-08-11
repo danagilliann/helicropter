@@ -38,6 +38,8 @@ const HelicropterView = View.extend({
       uploaderOptions: this._model.get('uploaderOptions'),
       width: this._model.get('canvasSize').width,
       height: this._model.get('canvasSize').height,
+      titleText: this._model.get('uploadTitle'),
+      subtitleText: this._model.get('uploadSubtitle')
     });
     this._uploadArea.render(this.$view.find('.js-upload-container'));
   },
