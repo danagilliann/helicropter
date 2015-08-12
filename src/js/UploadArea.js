@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import CloudUploader from 'BeFF/Component/CloudUploader';
-import View from 'BeFF/View';
+import CloudUploader from 'beff/Component/CloudUploader';
+import View from 'beff/View';
 
 import template from '../templates/upload-area.mustache';
 
@@ -17,6 +17,7 @@ const Uploader = CloudUploader.extend({
     }
 
     $.extend(config, {
+      drift: 0,
       cors: {
         expected: true,
         sendCredentials: true

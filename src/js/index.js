@@ -1,6 +1,6 @@
 import extend from 'nbd/util/extend';
-import Controller from 'BeFF/Controller';
-import View from 'BeFF/View';
+import Controller from 'beff/Controller';
+import View from 'beff/View';
 
 import UploadArea from './UploadArea';
 import CroppingArea from './CroppingArea';
