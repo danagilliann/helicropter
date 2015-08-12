@@ -2,9 +2,9 @@ require.config({
   paths: {
     helicropter: '/dist/js/helicropter',
     jquery: '/vendor/jquery/dist/jquery',
-    BeFF: '/vendor/BeFF',
-    nbd: '/vendor/BeFF/bower_components/nbd',
-    fineuploader: '/vendor/BeFF/bower_components/fineuploader/dist'
+    beff: '/vendor/beff',
+    nbd: '/vendor/beff/bower_components/nbd',
+    fineuploader: '/vendor/beff/bower_components/fineuploader/dist'
   }
 });
 

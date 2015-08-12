@@ -1,4 +1,4 @@
-import View from 'BeFF/View';
+import View from 'beff/View';
 
 import template from '../templates/zoom-slider.mustache';
 

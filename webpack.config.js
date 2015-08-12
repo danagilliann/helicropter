@@ -25,10 +25,10 @@ module.exports = [{
   },
   externals: [
     'jquery',
-    'BeFF/Controller',
-    'BeFF/Component',
-    'BeFF/View',
-    'BeFF/Component/CloudUploader',
+    'beff/Controller',
+    'beff/Component',
+    'beff/View',
+    'beff/Component/CloudUploader',
     'nbd/util/extend'
   ],
   module: {

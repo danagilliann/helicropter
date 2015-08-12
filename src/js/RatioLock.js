@@ -1,5 +1,5 @@
 import extend from 'nbd/util/extend';
-import View from 'BeFF/View';
+import View from 'beff/View';
 
 import template from '../templates/ratio-lock.mustache';
 
