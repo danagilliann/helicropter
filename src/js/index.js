@@ -128,6 +128,8 @@ const HelicropterView = View.extend({
       this._croppingArea.relay(this._suggestionArea, 'set-image');
       this._uploadArea.relay(this._suggestionArea, 'upload-image');
 
+      this.on('remove-image', () => this._suggestionArea.reset());
+      this._uploadArea.on('set-image', () => this._suggestionArea.reset());
       this._suggestionArea.on('set-image', (url) => {
         this._url = url;
         this._enableImageManipulation();

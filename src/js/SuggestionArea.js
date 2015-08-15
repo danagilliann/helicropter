@@ -9,6 +9,8 @@ export default View.extend({
 
   init(model) {
     this._super(this._padOrTruncateSuggestions(model));
+
+    this._$activeElement = null;
   },
 
   events: {
@@ -18,12 +20,19 @@ export default View.extend({
     }
   },
 
+  reset() {
+    if (!this._$activeElement) { return; }
+
+    this._$activeElement.removeClass('active');
+    this._$activeElement = null;
+  },
+
   _padOrTruncateSuggestions(model) {
     model.suggestions = model.suggestions || [];
 
     if (model.suggestions.length < this._maxSuggestions) {
       while (model.suggestions.length < this._maxSuggestions) {
-        model.suggestions.push({ src: '' });
+        model.suggestions.push({ src: '', empty: true });
       }
     }
     else {
@@ -35,6 +44,13 @@ export default View.extend({
 
   _setImage({ currentTarget: target }) {
     if (!target.dataset.src) { return; }
+
+    if (this._$activeElement) {
+      this.reset();
+    }
+
+    this._$activeElement = $(target);
+    this._$activeElement.addClass('active');
 
     this.trigger('set-image', target.dataset.src);
   }
