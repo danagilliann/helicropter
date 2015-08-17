@@ -1,20 +1,22 @@
 <div class="suggestion-list">
   <ul>
     {{#suggestions}}
-    <li class="js-suggestion-item suggestion-item{{#active}} active{{/active}}{{#empty}} empty{{/empty}}" data-src="{{src}}">
+      <li class="js-suggestion-item suggestion-item{{#active}} active{{/active}}{{#empty}} empty{{/empty}}" data-src="{{src}}">
         <div class="suggestion-item-img">
           <img src="{{src}}" style="height:100%;overflow:hidden"/>
         </div>
       </li>
     {{/suggestions}}
     <li class="upload-btn suggestion-item js-upload-btn">
-      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-        viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve" class="icon icon-upload">
-        <path fill-rule="evenodd" clip-rule="evenodd" d="M41,21.9c0.1-0.6,0.2-1.2,0.2-1.9c0-6.6-5.4-12-12-12
-        c-5.6,0-10.3,3.9-11.6,9c-0.9-0.3-1.9-0.5-3-0.5c-5.2,0-9.4,4.2-9.4,9.4c0,0.9,0.1,1.8,0.4,2.6c-0.1,0-0.2,0-0.4,0
-        c-2.8,0-5.1,2.3-5.1,5.1S2.3,39,5.1,39c0.6,0,1.7,0,1.7,0H24V25l-6.6,7l-2.8-2.5L26,18l11.4,11.5L34.5,32L28,25v14h11.5l1.7-0.3
-        c3.9-0.8,6.8-4.3,6.8-8.4C48,26.1,45,22.6,41,21.9z"/>
-      </svg>
+      <div class="suggestion-item-img">
+        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          viewBox="0 0 48 48" enable-background="new 0 0 48 48" xml:space="preserve" class="icon icon-upload">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M41,21.9c0.1-0.6,0.2-1.2,0.2-1.9c0-6.6-5.4-12-12-12
+          c-5.6,0-10.3,3.9-11.6,9c-0.9-0.3-1.9-0.5-3-0.5c-5.2,0-9.4,4.2-9.4,9.4c0,0.9,0.1,1.8,0.4,2.6c-0.1,0-0.2,0-0.4,0
+          c-2.8,0-5.1,2.3-5.1,5.1S2.3,39,5.1,39c0.6,0,1.7,0,1.7,0H24V25l-6.6,7l-2.8-2.5L26,18l11.4,11.5L34.5,32L28,25v14h11.5l1.7-0.3
+          c3.9-0.8,6.8-4.3,6.8-8.4C48,26.1,45,22.6,41,21.9z"/>
+        </svg>
+      </div>
     </li>
   </ul>
 </div>
