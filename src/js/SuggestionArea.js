@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import View from 'beff/View';
 
 import template from '../templates/suggesstion-area.mustache';
