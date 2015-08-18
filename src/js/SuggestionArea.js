@@ -53,6 +53,6 @@ export default View.extend({
     this._$activeElement = $(target);
     this._$activeElement.addClass('active');
 
-    this.trigger('set-image', target.dataset.src);
+    this.trigger('set-image', { src: target.dataset.src, url: target.dataset.url });
   }
 });
