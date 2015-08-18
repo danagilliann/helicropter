@@ -1,6 +1,7 @@
 /* jshint node: true */
 var path = require('path');
-var webpack = require("webpack");
+var webpack = require('webpack');
+var Notifier = require('webpack-notifier');
 
 var commonLoaders = [
   { test: /(\.js)$/, exclude: /node_modules/, loader: 'babel-loader' },
@@ -12,7 +13,6 @@ var assetsPath = path.join(__dirname, 'dist', 'js');
 module.exports = [{
   // The configuration for the client
   name: 'browser',
-  debug: true,
   entry: './src/js/index.js',
   output: {
     path: assetsPath,
@@ -20,7 +20,7 @@ module.exports = [{
     filename: 'helicropter.js'
   },
   resolve: {
-    root: [path.join(__dirname, "bower_components")],
+    root: [path.join(__dirname, 'bower_components')],
     modulesDirectories: ['node_modules']
   },
   externals: [
@@ -37,7 +37,8 @@ module.exports = [{
   devtool: 'inline-source-map',
   plugins: [
     new webpack.ResolverPlugin(
-      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin("bower.json", ["main"])
-    )
+      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
+    ),
+    new Notifier({ title: 'Helicropter' })
   ]
 }];

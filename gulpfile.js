@@ -1,20 +1,34 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
+var jshint = require('gulp-jshint');
+var jscs = require('gulp-jscs');
+var stylish = require('gulp-jscs-stylish');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var livereload = require('gulp-livereload');
+
+var noop = function() {};
 
 var webpack = require('webpack');
 var webpackConfig = require('./webpack.config');
 
 var webpackInst = webpack(webpackConfig);
-gulp.task("webpack", function(cb) {
+gulp.task("webpack", ['js:lint'], function(cb) {
   webpackInst.run(function(err) {
     if (err) { throw new gutil.PluginError("webpack", err); }
     gutil.log("[webpack]", "Built modules successfully");
     cb();
   });
+});
+
+gulp.task('js:lint', function() {
+  return gulp.src('./src/js/**/*.js')
+  .pipe(jshint())
+  .pipe(jscs())
+  .on('error', noop)
+  .pipe(stylish.combineWithHintResults())
+  .pipe(jshint.reporter('jshint-stylish'))
 });
 
 gulp.task('sass', function() {
