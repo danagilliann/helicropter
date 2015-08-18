@@ -34,15 +34,15 @@ define([
     },
     //uploadTitle: 'Upload a new cover image',
     //uploadSubtitle: 'This will not affect your Behance cover image',
-    //initialImage: '/imgs/test-kitten.jpeg',
+    initialImage: { src: '/imgs/test-kitten.jpeg', url: 'https://foo.com/imgs/test-kitten.jpeg' },
     showRatioLock: true,
     showSuggestions: true,
     suggestions: [
-      { src: '/imgs/test-kitten.jpeg' },
-      { src: '/imgs/test-image-0.png' },
-      { src: '/imgs/test-image-1.png' },
-      { src: '/imgs/test-image-2.png' },
-      { src: '/imgs/test-image-3.png' }
+      { src: '/imgs/test-kitten.jpeg', url: 'https://foo.com/imgs/test-kitten.jpeg', active: true },
+      { src: '/imgs/test-image-0.png', url: 'https://foo.com/imgs/test-image-0.png' },
+      { src: '/imgs/test-image-1.png', url: 'https://foo.com/imgs/test-image-1.png' },
+      { src: '/imgs/test-image-2.png', url: 'https://foo.com/imgs/test-image-2.png' },
+      { src: '/imgs/test-image-3.png', url: 'https://foo.com/imgs/test-image-3.png' }
     ]
   });
   cropper.render($('.js-cropper'));
