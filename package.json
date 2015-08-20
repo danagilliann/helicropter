@@ -32,6 +32,7 @@
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.2.4",
     "jquery": "^2.1.4",
+    "jscs-preset-behance": "^1.0.0",
     "jshint-stylish": "^2.0.1",
     "karma": "^0.12.37",
     "karma-webpack": "^1.5.1",
