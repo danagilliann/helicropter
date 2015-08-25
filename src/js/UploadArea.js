@@ -92,6 +92,7 @@ export default View.extend({
 
       error(err) {
         console.error(err);
+        this.trigger('upload-error', err);
       }
     });
   }

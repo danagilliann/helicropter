@@ -47,5 +47,8 @@ define([
   });
   cropper.render($('.js-cropper'));
 
+  cropper.on('error:upload', function(err) {
+    console.error('Error:', err.message);
+  });
   window.cropper = cropper;
 });

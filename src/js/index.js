@@ -102,9 +102,16 @@ const HelicropterView = View.extend({
     this._croppingArea.relay(this._uploadArea, 'set-image');
     this._zoomSlider.relay(this._croppingArea, 'image-loaded');
 
-    this._uploadArea.on('image-uploaded', (url) => {
-      this._url = url;
-      this.trigger('image:uploaded');
+    this.listenTo(this._uploadArea, {
+      ['image-uploaded'](url) {
+        this._url = url;
+        this.trigger('image:uploaded');
+      },
+
+      ['upload-error'](err) {
+        this.trigger('remove-image');
+        this.trigger('error:upload', err);
+      }
     });
     this._uploadArea.on('set-image', () => {
       this._enableImageManipulation();
@@ -187,7 +194,7 @@ const Helicropter = Controller.extend({
   init(model) {
     this._super(extend({}, this._defaults, model));
 
-    this.relay(this._view, 'controls:enabled controls:disabled image:uploading image:uploaded');
+    this.relay(this._view, 'controls:enabled controls:disabled image:uploading image:uploaded, error:upload');
   },
 
   crop() {
