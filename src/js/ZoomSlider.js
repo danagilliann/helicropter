@@ -5,9 +5,10 @@ import template from '../templates/zoom-slider.mustache';
 export default View.extend({
   mustache: template,
 
-  init({ cropWidth, cropHeight }) {
+  init({ cropWidth, cropHeight, allowTransparency }) {
     this._cropWidth = cropWidth;
     this._cropHeight = cropHeight;
+    this._lowerBoundFn = allowTransparency ? Math.min : Math.max;
 
     this._super();
 
@@ -37,7 +38,7 @@ export default View.extend({
     const widthScaleMin = this._cropWidth / imageDimensions.width;
     const heightScaleMin = this._cropHeight / imageDimensions.height;
 
-    this._scaleMin = Math.min(widthScaleMin, heightScaleMin);
+    this._scaleMin = this._lowerBoundFn(widthScaleMin, heightScaleMin);
     this._scaleStep = (1.0 - this._scaleMin) / 100;
   },
 
