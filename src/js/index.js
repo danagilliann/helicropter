@@ -57,7 +57,8 @@ const HelicropterView = View.extend({
   _addZoomSlider() {
     this._zoomSlider = new ZoomSlider({
       cropWidth: this._model.get('cropSize').width,
-      cropHeight: this._model.get('cropSize').height
+      cropHeight: this._model.get('cropSize').height,
+      allowTransparency: this._model.get('allowTransparency')
     });
     this._zoomSlider.render(this.$view.find('.js-crop-controls'));
   },
@@ -186,6 +187,7 @@ const Helicropter = Controller.extend({
       width: 320,
       height: 250
     },
+    allowTransparency: true,
     showRatioLock: false,
     showSuggestions: false,
     suggestions: []

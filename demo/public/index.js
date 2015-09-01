@@ -17,8 +17,8 @@ define([
   var cropper = new Helicropter({
     uploaderOptions: {
       request: {
-        endpoint: '',
-        accessKey: ''
+        endpoint: 'foo',
+        accessKey: 'foo'
       },
       signature: {
         endpoint: '/s3handler'
@@ -34,6 +34,7 @@ define([
     },
     //uploadTitle: 'Upload a new cover image',
     //uploadSubtitle: 'This will not affect your Behance cover image',
+    //allowTransparency: false,
     initialImage: { src: '/imgs/test-kitten.jpeg', url: 'https://foo.com/imgs/test-kitten.jpeg' },
     showRatioLock: true,
     showSuggestions: true,
