@@ -1,7 +1,9 @@
+import Promise from 'nbd/Promise';
 import extend from 'nbd/util/extend';
 import View from 'beff/View';
 import { fabric } from 'fabric';
 
+import transparencyImage from '../img/bg-cropper.gif';
 import template from '../templates/crop-area.mustache';
 
 export default View.extend({
@@ -22,8 +24,9 @@ export default View.extend({
     this._canvas.on('mouse:move', () => this._canvas.setActiveObject(this._cropArea));
     this._canvas.on('mouse:up', () => this._canvas.setActiveObject(this._cropArea));
 
-    this._createImage();
-    this._createStaticCropArea();
+    this._createImage()
+    .then(() => this._createTransparencyBackground())
+    .then(() => this._createStaticCropArea());
 
     this.on({
       scale(scaleValue) { this._scaleImage(scaleValue); },
@@ -75,11 +78,38 @@ export default View.extend({
     };
   },
 
-  _createImage() {
-    if (!this._model.image) { return; }
+  _createTransparencyBackground() {
+    return this._loadImage(transparencyImage)
+    .then((image) => {
+      const pattern = new fabric.Pattern({
+        source: image,
+        repeat: 'repeat'
+      });
 
-    const image = new Image();
-    image.onload = () => {
+      const patternRect = new fabric.Rect({
+        left: 0,
+        top: 0,
+        width: this._model.canvasWidth * 2,
+        height: this._model.canvasHeight * 2,
+        fill: pattern,
+        selectable: false,
+        evented: false,
+        hasBorders: false,
+        hasControls: false
+      });
+
+      this._canvas.add(patternRect);
+      patternRect.sendToBack();
+      patternRect.scale(0.5).setCoords();
+      patternRect.center().setCoords();
+    });
+  },
+
+  _createImage() {
+    if (!this._model.image) { return Promise.resolve(); }
+
+    return this._loadImage(this._model.image)
+    .then((image) => {
       if (this._image) {
         this._image.remove();
       }
@@ -95,6 +125,7 @@ export default View.extend({
 
       this._canvas.add(this._image);
       this._image.sendToBack();
+      this._image.bringForward();
       this._image.scale(1.0).setCoords();
       this._image.center().setCoords();
 
@@ -107,9 +138,7 @@ export default View.extend({
         width: this._image.get('width'),
         height: this._image.get('height')
       });
-    };
-
-    image.src = this._model.image;
+    });
   },
 
   _scaleImage(scaleValue) {
@@ -347,5 +376,14 @@ export default View.extend({
       this._canvas.remove(this._cropOverlay);
       this._cropOverlay = null;
     }
+  },
+
+  _loadImage(imageData) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onerror = () => reject();
+      image.onload = () => resolve(image);
+      image.src = imageData;
+    });
   }
 });

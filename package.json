@@ -44,6 +44,7 @@
     "node-libs-browser": "^0.5.2",
     "requirejs": "^2.1.18",
     "rx": "^2.5.3",
+    "url-loader": "^0.5.6",
     "webpack": "^1.10.1",
     "webpack-notifier": "^1.2.1"
   }

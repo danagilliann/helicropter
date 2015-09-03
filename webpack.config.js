@@ -5,7 +5,8 @@ var Notifier = require('webpack-notifier');
 
 var commonLoaders = [
   { test: /(\.js)$/, exclude: /node_modules/, loader: 'babel-loader' },
-  { test: /(\.mustache)$/, exclude: /node_modules/, loader: 'mustache' }
+  { test: /(\.mustache)$/, exclude: /node_modules/, loader: 'mustache' },
+  { test: /\.(png|jpg|gif)$/, loader: 'url?limit=25000' }
 ];
 
 var assetsPath = path.join(__dirname, 'dist', 'js');
