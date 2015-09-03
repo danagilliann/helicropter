@@ -106,7 +106,7 @@ const HelicropterView = View.extend({
     this.listenTo(this._uploadArea, {
       ['image-uploaded'](url) {
         this._url = url;
-        this.trigger('image:uploaded');
+        this.trigger('image:uploaded', url);
       },
 
       ['upload-error'](err) {
