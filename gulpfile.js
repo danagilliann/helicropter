@@ -46,3 +46,5 @@ gulp.task('watch', ['webpack', 'sass'], function() {
 
   gulp.watch(['dist/**/*']).on('change', livereload.changed);
 });
+
+gulp.task('test', ['js:lint']);
