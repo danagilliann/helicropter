@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "gulp watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp test"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
     "babel-loader": "^5.3.1",
     "beff": "^2.1.0",
     "bower": "^1.4.1",
+    "file-loader": "^0.8.4",
     "gulp": "^3.9.0",
     "gulp-jscs": "^2.0.0",
     "gulp-jscs-stylish": "^1.1.2",
@@ -31,6 +32,8 @@
     "gulp-sass": "^2.0.3",
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.2.4",
+    "image-webpack-loader": "^1.6.1",
+    "imagemin": "^3.2.0",
     "jquery": "^2.1.4",
     "jscs-preset-behance": "^1.0.0",
     "jshint-stylish": "^2.0.1",
