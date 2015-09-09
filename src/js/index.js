@@ -196,7 +196,7 @@ const Helicropter = Controller.extend({
   init(model) {
     this._super(extend({}, this._defaults, model));
 
-    this.relay(this._view, 'controls:enabled controls:disabled image:uploading image:uploaded, error:upload');
+    this.relay(this._view, 'controls:enabled controls:disabled image:uploading image:uploaded error:upload');
   },
 
   crop() {
