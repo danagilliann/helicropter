@@ -70,8 +70,8 @@ export default View.extend({
 
   getCropData() {
     return {
-      x: (this._image.get('left') * -1) + this._cropArea.get('left'),
-      y: (this._image.get('top') * -1) + this._cropArea.get('top'),
+      x: (this._getImageProp('left') * -1) + this._getCropAreaProp('left'),
+      y: (this._getImageProp('top') * -1) + this._getCropAreaProp('top'),
       width: this._cropArea.getWidth(),
       height: this._cropArea.getHeight(),
       scale: this._image.getScaleX()
@@ -173,16 +173,16 @@ export default View.extend({
   },
 
   _checkImageBounds() {
-    const leftDelta = this._image.get('left');
-    const topDelta = this._image.get('top');
+    const leftDelta = this._getImageProp('left');
+    const topDelta = this._getImageProp('top');
 
     const widthBelowScale = this._image.getWidth() < this._cropArea.getWidth();
     const heightBelowScale = this._image.getHeight() < this._cropArea.getHeight();
 
-    const maxLeftDelta = this._cropArea.get('left');
-    const maxTopDelta = this._cropArea.get('top');
-    const minLeftDelta = -this._image.getWidth() + (this._cropArea.get('left') + this._cropArea.getWidth());
-    const minTopDelta = -this._image.getHeight() + (this._cropArea.get('top') + this._cropArea.getHeight());
+    const maxLeftDelta = this._getCropAreaProp('left');
+    const maxTopDelta = this._getCropAreaProp('top');
+    const minLeftDelta = -this._image.getWidth() + (this._getCropAreaProp('left') + this._cropArea.getWidth());
+    const minTopDelta = -this._image.getHeight() + (this._getCropAreaProp('top') + this._cropArea.getHeight());
 
     if (widthBelowScale) {
       if (leftDelta < maxLeftDelta) {
@@ -246,30 +246,15 @@ export default View.extend({
   },
 
   _createStaticCropArea() {
-    this._cropAreaViewport = new fabric.Rect({
-      originX: 'left',
-      originY: 'top',
-      left: 1,
-      top: 1,
-      width: this._model.cropWidth,
-      height: this._model.cropHeight,
-      fill: 'transparent'
-    });
-
-    this._cropAreaBorder = new fabric.Rect({
-      originX: 'left',
-      originY: 'top',
-      width: this._model.cropWidth + 2,
-      height: this._model.cropHeight + 2,
-      fill: 'transparent',
-      stroke: 'rgba(37, 38, 42, 1.0)'
-    });
-
-    this._cropArea = new fabric.Group([this._cropAreaViewport, this._cropAreaBorder], {
+    this._cropArea = new fabric.Rect({
       originX: 'left',
       originY: 'top',
       selectable: false,
       evented: false,
+      width: this._model.cropWidth,
+      height: this._model.cropHeight,
+      fill: 'transparent',
+      stroke: 'rgba(37, 38, 42, 1.0)',
       hasBorders: false,
       hasControls: false
     });
@@ -282,8 +267,8 @@ export default View.extend({
 
   _createDynamicCropArea() {
     this._cropArea = new fabric.Rect({
-      width: this._model.cropWidth + 2,
-      height: this._model.cropHeight + 2,
+      width: this._model.cropWidth,
+      height: this._model.cropHeight,
       fill: 'transparent',
       borderColor: 'transparent',
       strokeDashArray: [5, 5],
@@ -327,6 +312,8 @@ export default View.extend({
 
       this._image.set('left', this._startingTransform.x + (currentPointer.x - this._startingPointer.x));
       this._image.set('top', this._startingTransform.y + (currentPointer.y - this._startingPointer.y));
+
+      this._checkImageBounds();
     });
 
     this._cropArea.on('scaling', () => {
@@ -340,9 +327,17 @@ export default View.extend({
     });
   },
 
+  _getCropAreaProp(prop) {
+    return Math.round(this._cropArea.get(prop));
+  },
+
+  _getImageProp(prop) {
+    return Math.round(this._image.get(prop));
+  },
+
   _createOverlay() {
-    const topOffset = Math.ceil(this._cropArea.get('top'));
-    const leftOffset = Math.ceil(this._cropArea.get('left'));
+    const topOffset = this._getCropAreaProp('top');
+    const leftOffset = this._getCropAreaProp('left');
     const rightOffset = Math.max(0, this._model.canvasWidth - (leftOffset + this._cropArea.getWidth()));
     const bottomOffset = Math.max(0, this._model.canvasHeight - (topOffset + this._cropArea.getHeight()));
 
