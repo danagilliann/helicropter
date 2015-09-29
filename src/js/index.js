@@ -36,6 +36,7 @@ const HelicropterView = View.extend({
   _addUploadArea() {
     this._uploadArea = new UploadArea({
       uploaderOptions: this._model.get('uploaderOptions'),
+      backgroundImage: this._model.get('uploadBackgroundImage'),
       width: this._model.get('canvasSize').width,
       height: this._model.get('canvasSize').height,
       titleText: this._model.get('uploadTitle'),
