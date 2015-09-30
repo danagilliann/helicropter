@@ -20,7 +20,7 @@ export default View.extend({
     return extend({
       checked: true,
       labelText: 'Enable aspect ratio for cover image resize'
-    });
+    }, this._model);
   },
 
   disable() {

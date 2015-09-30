@@ -50,7 +50,8 @@ const HelicropterView = View.extend({
       canvasWidth: this._model.get('canvasSize').width,
       canvasHeight: this._model.get('canvasSize').height,
       cropWidth: this._model.get('cropSize').width,
-      cropHeight: this._model.get('cropSize').height
+      cropHeight: this._model.get('cropSize').height,
+      viewportRatio: this._model.get('viewportRatio')
     });
     this._croppingArea.render(this.$view.find('.js-crop-container'));
   },
@@ -67,7 +68,8 @@ const HelicropterView = View.extend({
   _addRatioLock() {
     if (this._model.get('showRatioLock')) {
       this._ratioLock = new RatioLock({
-        labelText: this._model.get('ratioLockText')
+        labelText: this._model.get('ratioLockText'),
+        checked: this._model.get('viewportRatio') === 'static'
       });
       this._ratioLock.render(this.$view.find('.js-crop-controls'));
     }
@@ -188,6 +190,8 @@ const Helicropter = Controller.extend({
       width: 320,
       height: 250
     },
+    viewportRatio: 'static',
+    ratioLockText: 'Enable aspect ratio for cover image resize',
     allowTransparency: true,
     showRatioLock: false,
     showSuggestions: false,
