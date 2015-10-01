@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import Spinner from 'spin.js';
 import CloudUploader from 'beff/Component/CloudUploader';
 import View from 'beff/View';
 
@@ -54,8 +55,32 @@ export default View.extend({
 
   rendered() {
     this._$container = this.$view.parent();
+    this._$btnArea = this.$view.find('.js-image-upload-wrapper');
+    this._$btn = this.$view.find('.js-upload-button');
 
-    this._uploader = new Uploader(this.$view[0], this._model.uploaderOptions);
+    this._uploader = new Uploader(this._$btn[0], this._model.uploaderOptions);
+    this._spinner = new Spinner({
+      lines: 40,
+      length: 1,
+      width: 2,
+      radius: 10,
+      scale: 1,
+      corners: 1,
+      color: '#fff',
+      opacity: 0.1,
+      rotate: 0,
+      direction: 1,
+      speed: 1,
+      trail: 46,
+      fps: 20,
+      zIndex: 1,
+      className: 'spinner',
+      top: '50%',
+      left: '50%',
+      shadow: false,
+      hwaccel: true,
+      position: 'absolute'
+    });
 
     this._$container.css({
       width: this._model.width,
@@ -74,23 +99,41 @@ export default View.extend({
     this._$container.removeClass('hide');
   },
 
+  _showUploadState() {
+    this._spinner.stop();
+    this._$btn.removeClass('hide');
+  },
+
+  _showLoadingState() {
+    this._$btn.addClass('hide');
+    this._spinner.spin(this._$btnArea[0]);
+  },
+
   _uploadImage() {
     this._uploader.choose();
   },
 
   _bindUploader() {
     this.listenTo(this._uploader, {
-      submit({ file }) {
-        this.hide();
-        this.trigger('set-image', file.readerData.result);
+      submit() {
+        this._showLoadingState();
+
+        this.trigger('image-uploading');
       },
 
-      complete(data) {
-        this._url = `${data.uploadEndpoint}/${data.uploadPath}`;
+      complete({ file, uploadPath, uploadEndpoint }) {
+        this.hide();
+        this._showUploadState();
+
+        this._url = `${uploadEndpoint}/${uploadPath}`;
+
+        this.trigger('set-image', file.readerData.result);
         this.trigger('image-uploaded', this._url);
       },
 
       error(err) {
+        this._showUploadState();
+
         console.error(err);
         this.trigger('upload-error', err);
       }

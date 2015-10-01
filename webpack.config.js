@@ -21,7 +21,6 @@ module.exports = [{
     filename: 'helicropter.js'
   },
   resolve: {
-    root: [path.join(__dirname, 'bower_components')],
     modulesDirectories: ['node_modules']
   },
   externals: [
@@ -37,9 +36,6 @@ module.exports = [{
   },
   devtool: 'inline-source-map',
   plugins: [
-    new webpack.ResolverPlugin(
-      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
-    ),
     new Notifier({ title: 'Helicropter' })
   ]
 }];

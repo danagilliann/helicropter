@@ -107,6 +107,10 @@ const HelicropterView = View.extend({
     this._zoomSlider.relay(this._croppingArea, 'image-loaded');
 
     this.listenTo(this._uploadArea, {
+      ['image-uploading']() {
+        this._disableImageManipulation();
+      },
+
       ['image-uploaded'](url) {
         this._url = url;
         this.trigger('image:uploaded', url);
@@ -128,7 +132,9 @@ const HelicropterView = View.extend({
       this._croppingArea.relay(this._ratioLock, 'ratio-locked');
 
       this._uploadArea.on('set-image', () => this._ratioLock.enable());
-      this.on('remove-image', () => this._ratioLock.disable());
+
+      this.on('controls:enabled', () => this._ratioLock.enable());
+      this.on('remove-image controls:disabled', () => this._ratioLock.disable());
 
       if (this._model.get('showSuggestions')) {
         this._suggestionArea.on('set-image', () => this._ratioLock.enable());

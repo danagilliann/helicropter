@@ -18,6 +18,8 @@
     "tests"
   ],
   "dependencies": {
+    "nbd": "nbd.js#^1.1.2",
+    "BeFF": "https://github.com/behance/BeFF.git#~2.3.1",
     "fabric": "~1.5.0"
   }
 }
