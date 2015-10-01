@@ -21,16 +21,11 @@ module.exports = [{
     filename: 'helicropter.js'
   },
   resolve: {
+    alias: {
+      fineuploader: 'fine-uploader/dist'
+    },
     modulesDirectories: ['node_modules']
   },
-  externals: [
-    'jquery',
-    'beff/Controller',
-    'beff/Component',
-    'beff/View',
-    'beff/Component/CloudUploader',
-    'nbd/util/extend'
-  ],
   module: {
     loaders: commonLoaders
   },
