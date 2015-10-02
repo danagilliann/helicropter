@@ -1,6 +1,6 @@
 {
   "name": "helicropter",
-  "version": "2.3.2",
+  "version": "3.0.0",
   "description": "My helicropter goes \"whosh whosh whosh\"",
   "main": "src/js/index.js",
   "scripts": {
