@@ -38,12 +38,12 @@ export default View.extend({
     this.on({
       scale(scaleValue) { this._scaleImage(scaleValue); },
 
-      ['set-image'](imageSrc) {
+      'set-image'(imageSrc) {
         this._model.image = imageSrc;
         this._createImage();
       },
 
-      ['ratio-locked'](ratioLocked) {
+      'ratio-locked'(ratioLocked) {
         this._removeOverlay();
 
         if (this._cropArea) {

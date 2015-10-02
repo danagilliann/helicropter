@@ -107,16 +107,16 @@ const HelicropterView = View.extend({
     this._zoomSlider.relay(this._croppingArea, 'image-loaded');
 
     this.listenTo(this._uploadArea, {
-      ['image-uploading']() {
+      'image-uploading'() {
         this._disableImageManipulation();
       },
 
-      ['image-uploaded'](url) {
+      'image-uploaded'(url) {
         this._url = url;
         this.trigger('image:uploaded', url);
       },
 
-      ['upload-error'](err) {
+      'upload-error'(err) {
         this.trigger('remove-image');
         this.trigger('error:upload', err);
       }
