@@ -26,17 +26,24 @@ export default View.extend({
 
     this._createImage()
     .then(() => this._createTransparencyBackground())
-    .then(() => this._createStaticCropArea());
+    .then(() => {
+      if (this._model.viewportRatio === 'static') {
+        this._createStaticCropArea();
+      }
+      else if (this._model.viewportRatio === 'dynamic') {
+        this._createDynamicCropArea();
+      }
+    });
 
     this.on({
       scale(scaleValue) { this._scaleImage(scaleValue); },
 
-      ['set-image'](imageSrc) {
+      'set-image'(imageSrc) {
         this._model.image = imageSrc;
         this._createImage();
       },
 
-      ['ratio-locked'](ratioLocked) {
+      'ratio-locked'(ratioLocked) {
         this._removeOverlay();
 
         if (this._cropArea) {

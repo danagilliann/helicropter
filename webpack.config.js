@@ -21,25 +21,16 @@ module.exports = [{
     filename: 'helicropter.js'
   },
   resolve: {
-    root: [path.join(__dirname, 'bower_components')],
+    alias: {
+      fineuploader: 'fine-uploader/dist'
+    },
     modulesDirectories: ['node_modules']
   },
-  externals: [
-    'jquery',
-    'beff/Controller',
-    'beff/Component',
-    'beff/View',
-    'beff/Component/CloudUploader',
-    'nbd/util/extend'
-  ],
   module: {
     loaders: commonLoaders
   },
   devtool: 'inline-source-map',
   plugins: [
-    new webpack.ResolverPlugin(
-      new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main'])
-    ),
     new Notifier({ title: 'Helicropter' })
   ]
 }];

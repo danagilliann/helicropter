@@ -36,6 +36,7 @@ const HelicropterView = View.extend({
   _addUploadArea() {
     this._uploadArea = new UploadArea({
       uploaderOptions: this._model.get('uploaderOptions'),
+      backgroundImage: this._model.get('uploadBackgroundImage'),
       width: this._model.get('canvasSize').width,
       height: this._model.get('canvasSize').height,
       titleText: this._model.get('uploadTitle'),
@@ -49,7 +50,8 @@ const HelicropterView = View.extend({
       canvasWidth: this._model.get('canvasSize').width,
       canvasHeight: this._model.get('canvasSize').height,
       cropWidth: this._model.get('cropSize').width,
-      cropHeight: this._model.get('cropSize').height
+      cropHeight: this._model.get('cropSize').height,
+      viewportRatio: this._model.get('viewportRatio')
     });
     this._croppingArea.render(this.$view.find('.js-crop-container'));
   },
@@ -66,7 +68,8 @@ const HelicropterView = View.extend({
   _addRatioLock() {
     if (this._model.get('showRatioLock')) {
       this._ratioLock = new RatioLock({
-        labelText: this._model.get('ratioLockText')
+        labelText: this._model.get('ratioLockText'),
+        checked: this._model.get('viewportRatio') === 'static'
       });
       this._ratioLock.render(this.$view.find('.js-crop-controls'));
     }
@@ -104,12 +107,16 @@ const HelicropterView = View.extend({
     this._zoomSlider.relay(this._croppingArea, 'image-loaded');
 
     this.listenTo(this._uploadArea, {
-      ['image-uploaded'](url) {
+      'image-uploading'() {
+        this._disableImageManipulation();
+      },
+
+      'image-uploaded'(url) {
         this._url = url;
         this.trigger('image:uploaded', url);
       },
 
-      ['upload-error'](err) {
+      'upload-error'(err) {
         this.trigger('remove-image');
         this.trigger('error:upload', err);
       }
@@ -125,7 +132,9 @@ const HelicropterView = View.extend({
       this._croppingArea.relay(this._ratioLock, 'ratio-locked');
 
       this._uploadArea.on('set-image', () => this._ratioLock.enable());
-      this.on('remove-image', () => this._ratioLock.disable());
+
+      this.on('controls:enabled', () => this._ratioLock.enable());
+      this.on('remove-image controls:disabled', () => this._ratioLock.disable());
 
       if (this._model.get('showSuggestions')) {
         this._suggestionArea.on('set-image', () => this._ratioLock.enable());
@@ -187,6 +196,8 @@ const Helicropter = Controller.extend({
       width: 320,
       height: 250
     },
+    viewportRatio: 'static',
+    ratioLockText: 'Enable aspect ratio for cover image resize',
     allowTransparency: true,
     showRatioLock: false,
     showSuggestions: false,
