@@ -121,14 +121,16 @@ export default View.extend({
         this.trigger('image-uploading');
       },
 
-      complete({ file, uploadPath, uploadEndpoint }) {
-        this.hide();
+      complete({ file, uploadPath, uploadEndpoint, response }) {
         this._showUploadState();
 
-        this._url = `${uploadEndpoint}/${uploadPath}`;
+        if (response && response.success) {
+          this.hide();
+          this._url = `${uploadEndpoint}/${uploadPath}`;
 
-        this.trigger('set-image', file.readerData.result);
-        this.trigger('image-uploaded', this._url);
+          this.trigger('set-image', file.readerData.result);
+          this.trigger('image-uploaded', this._url);
+        }
       },
 
       error(err) {
