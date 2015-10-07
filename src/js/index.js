@@ -166,6 +166,8 @@ const HelicropterView = View.extend({
   },
 
   _disableImageManipulation() {
+    delete this._url;
+
     this._uploadArea.show();
 
     this._croppingArea.reset();
