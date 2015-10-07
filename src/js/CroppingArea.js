@@ -36,7 +36,11 @@ export default View.extend({
     });
 
     this.on({
-      scale(scaleValue) { this._scaleImage(scaleValue); },
+      scale(scaleValue) {
+        if (this._image) {
+          this._scaleImage(scaleValue);
+        }
+      },
 
       'set-image'(imageSrc) {
         this._model.image = imageSrc;
