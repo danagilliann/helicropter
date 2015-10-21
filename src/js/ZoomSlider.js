@@ -1,6 +1,6 @@
 import View from 'beff/View';
 
-import template from '../templates/zoom-slider.mustache';
+import template from 'hgn!templates/zoom-slider';
 
 export default View.extend({
   mustache: template,

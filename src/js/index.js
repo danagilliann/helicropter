@@ -8,7 +8,7 @@ import ZoomSlider from './ZoomSlider';
 import RatioLock from './RatioLock';
 import SuggestionArea from './SuggestionArea';
 
-import template from '../templates/wrapper.mustache';
+import template from 'hgn!templates/wrapper';
 
 const HelicropterView = View.extend({
   mustache: template,

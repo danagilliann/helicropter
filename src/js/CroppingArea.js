@@ -4,7 +4,7 @@ import View from 'beff/View';
 import { fabric } from 'fabric';
 
 import transparencyImage from '../img/bg-cropper.gif';
-import template from '../templates/crop-area.mustache';
+import template from 'hgn!templates/crop-area';
 
 export default View.extend({
   mustache: template,
