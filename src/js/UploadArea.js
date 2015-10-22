@@ -3,7 +3,7 @@ import Spinner from 'spin.js';
 import CloudUploader from 'beff/Component/CloudUploader';
 import View from 'beff/View';
 
-import template from '../templates/upload-area.mustache';
+import template from 'hgn!templates/upload-area';
 
 const Uploader = CloudUploader.extend({
   init($uploadBtn, options) {

@@ -1,11 +1,11 @@
 /* jshint node: true */
 var path = require('path');
-var webpack = require('webpack');
 var Notifier = require('webpack-notifier');
+var hgn = require('hgn-loader');
+hgn.prefix = 'src/templates/';
 
 var commonLoaders = [
   { test: /(\.js)$/, exclude: /node_modules/, loader: 'babel-loader' },
-  { test: /(\.mustache)$/, exclude: /node_modules/, loader: 'mustache' },
   { test: /\.(png|jpg|gif)$/, loader: 'url?limit=25000' }
 ];
 
@@ -22,8 +22,10 @@ module.exports = [{
   },
   resolve: {
     alias: {
+      templates: __dirname + '/src/templates',
       fineuploader: 'fine-uploader/dist'
     },
+    extensions: ['', '.js', '.mustache', '.css', '.scss'],
     modulesDirectories: ['node_modules']
   },
   module: {

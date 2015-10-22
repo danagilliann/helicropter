@@ -38,6 +38,7 @@
     "gulp-sass": "^2.0.3",
     "gulp-util": "^3.0.6",
     "gulp-watch": "^4.2.4",
+    "hgn-loader": "^0.1.1",
     "image-webpack-loader": "^1.6.1",
     "imagemin": "^3.2.0",
     "jscs-preset-behance": "^1.0.0",

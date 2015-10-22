@@ -36,7 +36,15 @@ define([
     allowTransparency: false,
     //uploadTitle: 'Upload a new cover image',
     //uploadSubtitle: 'This will not affect your Behance cover image',
-    //initialImage: { src: '/imgs/test-kitten.jpeg', url: 'https://foo.com/imgs/test-kitten.jpeg' },
+    initialImage: {
+      src: '/imgs/test-kitten.jpeg',
+      url: 'https://foo.com/imgs/test-kitten.jpeg',
+      coordinates: {
+        x: 0,
+        y: 0,
+        scale: 0.25
+      }
+    },
     uploadBackgroundImage: '/imgs/test-kitten.jpeg',
     showRatioLock: true,
     showSuggestions: true,

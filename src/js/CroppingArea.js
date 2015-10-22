@@ -4,7 +4,7 @@ import View from 'beff/View';
 import { fabric } from 'fabric';
 
 import transparencyImage from '../img/bg-cropper.gif';
-import template from '../templates/crop-area.mustache';
+import template from 'hgn!templates/crop-area';
 
 export default View.extend({
   mustache: template,
@@ -24,16 +24,16 @@ export default View.extend({
     this._canvas.on('mouse:move', () => this._canvas.setActiveObject(this._cropArea));
     this._canvas.on('mouse:up', () => this._canvas.setActiveObject(this._cropArea));
 
-    this._createImage()
-    .then(() => this._createTransparencyBackground())
-    .then(() => {
-      if (this._model.viewportRatio === 'static') {
-        this._createStaticCropArea();
-      }
-      else if (this._model.viewportRatio === 'dynamic') {
-        this._createDynamicCropArea();
-      }
-    });
+    this._createTransparencyBackground();
+
+    if (this._model.viewportRatio === 'static') {
+      this._createStaticCropArea();
+    }
+    else if (this._model.viewportRatio === 'dynamic') {
+      this._createDynamicCropArea();
+    }
+
+    this._createImage();
 
     this.on({
       scale(scaleValue) {
@@ -42,9 +42,10 @@ export default View.extend({
         }
       },
 
-      'set-image'(imageSrc) {
+      'set-image'(imageSrc, coordinates) {
         this._model.image = imageSrc;
-        this._createImage();
+        this._createImage(coordinates)
+        .catch((err) => console.error(err));
       },
 
       'ratio-locked'(ratioLocked) {
@@ -116,7 +117,7 @@ export default View.extend({
     });
   },
 
-  _createImage() {
+  _createImage(coordinates = {}) {
     if (!this._model.image) { return Promise.resolve(); }
 
     return this._loadImage(this._model.image)
@@ -137,8 +138,20 @@ export default View.extend({
       this._canvas.add(this._image);
       this._image.sendToBack();
       this._image.bringForward();
-      this._image.scale(1.0).setCoords();
-      this._image.center().setCoords();
+
+      this._image.scale(coordinates.scale || 1.0).setCoords();
+      this._image.center();
+
+      if (typeof coordinates.x !== 'undefined') {
+        this._image.set('left', this._getCropAreaProp('left') - coordinates.x);
+      }
+
+      if (typeof coordinates.y !== 'undefined') {
+        this._image.set('top', this._getCropAreaProp('top') - coordinates.y);
+      }
+
+      this._image.setCoords();
+      this._canvas.renderAll();
 
       this._image.on('moving', () => {
         this._checkImageBounds();

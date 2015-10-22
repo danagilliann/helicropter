@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import View from 'beff/View';
 
-import template from '../templates/suggesstion-area.mustache';
+import template from 'hgn!templates/suggesstion-area';
 
 export default View.extend({
   _maxSuggestions: 7,

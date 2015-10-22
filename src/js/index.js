@@ -8,7 +8,7 @@ import ZoomSlider from './ZoomSlider';
 import RatioLock from './RatioLock';
 import SuggestionArea from './SuggestionArea';
 
-import template from '../templates/wrapper.mustache';
+import template from 'hgn!templates/wrapper';
 
 const HelicropterView = View.extend({
   mustache: template,
@@ -57,10 +57,18 @@ const HelicropterView = View.extend({
   },
 
   _addZoomSlider() {
+    const initialImage = this._model.get('initialImage');
+    let initialScale = 1.0;
+
+    if (initialImage && initialImage.coordinates && typeof initialImage.coordinates.scale !== 'undefined') {
+      initialScale = initialImage.coordinates.scale;
+    }
+
     this._zoomSlider = new ZoomSlider({
       cropWidth: this._model.get('cropSize').width,
       cropHeight: this._model.get('cropSize').height,
-      allowTransparency: this._model.get('allowTransparency')
+      allowTransparency: this._model.get('allowTransparency'),
+      initialScale
     });
     this._zoomSlider.render(this.$view.find('.js-crop-controls'));
   },
@@ -89,7 +97,7 @@ const HelicropterView = View.extend({
 
     if (initialImage) {
       this._url = initialImage.url;
-      this._croppingArea.trigger('set-image', initialImage.src);
+      this._croppingArea.trigger('set-image', initialImage.src, initialImage.coordinates);
       this._enableImageManipulation();
     }
     else {

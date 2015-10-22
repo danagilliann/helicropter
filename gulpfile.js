@@ -15,9 +15,18 @@ var webpackConfig = require('./webpack.config');
 
 var webpackInst = webpack(webpackConfig);
 gulp.task("webpack", ['js:lint'], function(cb) {
-  webpackInst.run(function(err) {
-    if (err) { throw new gutil.PluginError("webpack", err); }
-    gutil.log("[webpack]", "Built modules successfully");
+  webpackInst.run(function(err, stats) {
+    if (err) {
+      throw new gutil.PluginError("webpack", err);
+    }
+
+    gutil.log("[webpack]", stats.toString({
+      colors: true,
+      version: false,
+      chunks: false,
+      chunkModules: false
+    }));
+
     cb();
   });
 });
@@ -28,7 +37,7 @@ gulp.task('js:lint', function() {
   .pipe(jscs())
   .on('error', noop)
   .pipe(stylish.combineWithHintResults())
-  .pipe(jshint.reporter('jshint-stylish'))
+  .pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('sass', function() {
