@@ -1,7 +1,7 @@
 import extend from 'nbd/util/extend';
 import View from 'beff/View';
 
-import template from 'hgn!templates/ratio-lock';
+import template from 'hgn!../templates/ratio-lock';
 
 export default View.extend({
   mustache: template,
