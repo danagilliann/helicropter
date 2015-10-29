@@ -6,6 +6,8 @@ import { fabric } from 'fabric';
 import transparencyImage from '../img/bg-cropper.gif';
 import template from 'hgn!../templates/crop-area';
 
+const minimumPadding = 20;
+
 export default View.extend({
   mustache: template,
 
@@ -23,6 +25,10 @@ export default View.extend({
     this._canvas.on('mouse:down', () => this._canvas.setActiveObject(this._cropArea));
     this._canvas.on('mouse:move', () => this._canvas.setActiveObject(this._cropArea));
     this._canvas.on('mouse:up', () => this._canvas.setActiveObject(this._cropArea));
+
+    if (this._model.cropRatio) {
+      this._setCropSizeByAspectRatio(this._model.cropRatio);
+    }
 
     this._createTransparencyBackground();
 
@@ -61,6 +67,17 @@ export default View.extend({
         else {
           this._createDynamicCropArea();
         }
+      },
+
+      'update-ratio'(ratio) {
+        this._setCropSizeByAspectRatio(ratio);
+        this._removeOverlay();
+
+        if (this._cropArea) {
+          this._canvas.remove(this._cropArea);
+        }
+
+        this._createStaticCropArea();
       }
     });
   },
@@ -88,6 +105,23 @@ export default View.extend({
       height: this._cropArea.getHeight(),
       scale: this._image.getScaleX()
     };
+  },
+
+  _setCropSizeByAspectRatio(ratio) {
+    const maxWidth = this._model.canvasWidth - (minimumPadding * 2);
+    const maxHeight = this._model.canvasHeight - (minimumPadding * 2);
+
+    const widthAtMaxHeight = (maxHeight / ratio.height) * ratio.width;
+    const heightAtMaxWidth = (maxWidth / ratio.width) * ratio.height;
+
+    if (widthAtMaxHeight < maxWidth) {
+      this._model.cropWidth = widthAtMaxHeight;
+      this._model.cropHeight = maxHeight;
+    }
+    else {
+      this._model.cropWidth = maxWidth;
+      this._model.cropHeight = heightAtMaxWidth;
+    }
   },
 
   _createTransparencyBackground() {
@@ -131,6 +165,7 @@ export default View.extend({
         top: 0,
         originX: 'left',
         originY: 'top',
+        selectable: !this._model.previewMode,
         hasBorders: false,
         hasControls: false
       });
