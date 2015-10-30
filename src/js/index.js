@@ -14,8 +14,17 @@ const HelicropterView = View.extend({
   mustache: template,
 
   rendered() {
-    this._addUploadArea();
     this._addCroppingArea();
+
+    if (this._model.get('previewMode')) {
+      if (this._model.get('initialImage')) {
+        this._croppingArea.trigger('set-image', this._model.get('initialImage').src, this._model.get('initialImage').coordinates);
+      }
+
+      return;
+    }
+
+    this._addUploadArea();
     this._addZoomSlider();
     this._addRatioLock();
     this._addSuggestionArea();
@@ -31,6 +40,12 @@ const HelicropterView = View.extend({
       url: this._url,
       coordinates: this._croppingArea.getCropData()
     };
+  },
+
+  setCropperAspectRatio(ratio) {
+    if (!this._croppingArea) { return; }
+
+    this._croppingArea.trigger('update-ratio', ratio);
   },
 
   _addUploadArea() {
@@ -51,7 +66,9 @@ const HelicropterView = View.extend({
       canvasHeight: this._model.get('canvasSize').height,
       cropWidth: this._model.get('cropSize').width,
       cropHeight: this._model.get('cropSize').height,
-      viewportRatio: this._model.get('viewportRatio')
+      viewportRatio: this._model.get('viewportRatio'),
+      cropRatio: this._model.get('cropRatio'),
+      previewMode: this._model.get('previewMode')
     });
     this._croppingArea.render(this.$view.find('.js-crop-container'));
   },
@@ -206,6 +223,7 @@ const Helicropter = Controller.extend({
       width: 320,
       height: 250
     },
+    previewMode: false,
     viewportRatio: 'static',
     ratioLockText: 'Enable aspect ratio for cover image resize',
     allowTransparency: true,
@@ -222,6 +240,10 @@ const Helicropter = Controller.extend({
 
   crop() {
     return this._view.getCropData();
+  },
+
+  changeAspectRatio(ratio) {
+    this._view.setCropperAspectRatio(ratio);
   },
 
   removeImage() {

@@ -32,6 +32,10 @@ define([
       width: 320,
       height: 250
     },
+    cropRatio: {
+      width: 4,
+      height: 3
+    },
     viewportRatio: 'static',
     allowTransparency: false,
     //uploadTitle: 'Upload a new cover image',
@@ -45,6 +49,7 @@ define([
         scale: 0.25
       }
     },
+    //previewMode: true,
     uploadBackgroundImage: '/imgs/test-kitten.jpeg',
     showRatioLock: true,
     showSuggestions: true,
