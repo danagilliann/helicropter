@@ -32,6 +32,10 @@ define([
       width: 320,
       height: 250
     },
+    previewCropSize: {
+      width: 202,
+      height: 158
+    },
     cropRatio: {
       width: 4,
       height: 3

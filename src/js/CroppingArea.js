@@ -191,12 +191,35 @@ export default View.extend({
       this._image.on('moving', () => {
         this._checkImageBounds();
         this._canvas.setActiveObject(this._cropArea);
+        this._broadcastDataURL();
       });
 
       this.trigger('image-loaded', {
         width: this._image.get('width'),
         height: this._image.get('height')
       });
+
+      this._broadcastDataURL();
+    });
+  },
+
+  _broadcastDataURL() {
+    const {width, height, scale} = this.getCropData();
+    const dataUrl = this._canvas.toDataURL({
+      left: this._getCropAreaProp('left'),
+      top: this._getCropAreaProp('top'),
+      width,
+      height
+    });
+
+    this.trigger('data-url', {
+      dataUrl,
+      // For scaling needs
+      cropArea: {
+        width: width,
+        height: height,
+        scale: scale
+      }
     });
   },
 
@@ -229,6 +252,8 @@ export default View.extend({
 
     this._checkImageBounds();
     this._canvas.renderAll();
+
+    this._broadcastDataURL();
   },
 
   _checkImageBounds() {
