@@ -7,6 +7,7 @@ import CroppingArea from './CroppingArea';
 import ZoomSlider from './ZoomSlider';
 import RatioLock from './RatioLock';
 import SuggestionArea from './SuggestionArea';
+import PreviewCrop from './PreviewCrop';
 
 import template from 'hgn!../templates/wrapper';
 
@@ -28,6 +29,7 @@ const HelicropterView = View.extend({
     this._addZoomSlider();
     this._addRatioLock();
     this._addSuggestionArea();
+    this._addPreviewCrop();
 
     this._bindSubsections();
     this._setInitialState();
@@ -109,6 +111,15 @@ const HelicropterView = View.extend({
     }
   },
 
+  _addPreviewCrop() {
+    if (this._model.get('previewCropSize')) {
+      this._previewCrop = new PreviewCrop({
+        previewCropSize: this._model.get('previewCropSize')
+      });
+      this._previewCrop.render(this.$view.find('.js-preview-crop-container'));
+    }
+  },
+
   _setInitialState() {
     const initialImage = this._model.get('initialImage');
 
@@ -176,6 +187,10 @@ const HelicropterView = View.extend({
         this._enableImageManipulation();
         this._croppingArea.trigger('set-image', src);
       });
+    }
+
+    if (this._model.get('previewCropSize')) {
+      this._previewCrop.relay(this._croppingArea, 'data-url');
     }
   },
 
