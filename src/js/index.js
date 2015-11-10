@@ -112,11 +112,15 @@ const HelicropterView = View.extend({
   },
 
   _addPreviewCrop() {
-    if (this._model.get('previewCropSize')) {
+    const config = this._model.get('previewCrop');
+    if (config) {
+      if (!config.element) {
+        throw new Error('previewCrop.element must be supplied in the configuration');
+      }
       this._previewCrop = new PreviewCrop({
-        previewCropSize: this._model.get('previewCropSize')
+        size: config.size
       });
-      this._previewCrop.render(this.$view.find('.js-preview-crop-container'));
+      this._previewCrop.render(config.element);
     }
   },
 
@@ -189,7 +193,7 @@ const HelicropterView = View.extend({
       });
     }
 
-    if (this._model.get('previewCropSize')) {
+    if (this._model.get('previewCrop')) {
       this._previewCrop.relay(this._croppingArea, 'data-url');
     }
   },
