@@ -7,10 +7,7 @@ export default View.extend({
 
   rendered() {
     this._$canvas = this.$view.find('.js-preview-crop-canvas');
-    this._$canvas.prop({
-      width: this._model.previewCropSize.width,
-      height: this._model.previewCropSize.height
-    });
+    this._$canvas.prop(this._model.size);
 
     this._canvas = new fabric.Canvas(this._$canvas[0], {
       selection: false,
@@ -23,8 +20,8 @@ export default View.extend({
 
   _onImageData({dataUrl, cropArea: {width, height}}) {
     this._scaleRatio = {
-      x: this._model.previewCropSize.width / width,
-      y: this._model.previewCropSize.height / height
+      x: this._model.size.width / width,
+      y: this._model.size.height / height
     };
 
     // TODO: Handle image load error
