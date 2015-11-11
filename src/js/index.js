@@ -70,7 +70,8 @@ const HelicropterView = View.extend({
       cropHeight: this._model.get('cropSize').height,
       viewportRatio: this._model.get('viewportRatio'),
       cropRatio: this._model.get('cropRatio'),
-      previewMode: this._model.get('previewMode')
+      previewMode: this._model.get('previewMode'),
+      shouldBroadcastDataURL: !!this._model.get('previewCrop')
     });
     this._croppingArea.render(this.$view.find('.js-crop-container'));
   },
