@@ -204,6 +204,8 @@ export default View.extend({
   },
 
   _broadcastDataURL() {
+    if (!this._model.shouldBroadcastDataURL) { return; }
+
     const {width, height, scale} = this.getCropData();
     const dataUrl = this._canvas.toDataURL({
       left: this._getCropAreaProp('left'),
