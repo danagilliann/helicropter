@@ -128,8 +128,7 @@ export default View.extend({
           this.hide();
           this._url = `${uploadEndpoint}/${uploadPath}`;
 
-          this.trigger('set-image', file.readerData.result);
-          this.trigger('image-uploaded', this._url);
+          this.trigger('image-uploaded', { src: file.readerData.result, url: this._url });
         }
       },
 
