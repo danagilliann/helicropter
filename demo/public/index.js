@@ -32,13 +32,13 @@ define([
       width: 320,
       height: 250
     },
-    previewCrop: {
-      element: $('.js-preview-crop-container'),
-      size: {
-        width: 202,
-        height: 158
-      }
-    },
+    //previewCrop: {
+      //element: $('.js-preview-crop-container'),
+      //size: {
+        //width: 202,
+        //height: 158
+      //}
+    //},
     cropRatio: {
       width: 4,
       height: 3

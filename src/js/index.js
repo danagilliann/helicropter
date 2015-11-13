@@ -39,6 +39,7 @@ const HelicropterView = View.extend({
     if (!this._url) { return; }
 
     return {
+      src: this._src,
       url: this._url,
       coordinates: this._croppingArea.getCropData()
     };
@@ -129,6 +130,7 @@ const HelicropterView = View.extend({
     const initialImage = this._model.get('initialImage');
 
     if (initialImage) {
+      this._src = initialImage.src;
       this._url = initialImage.url;
       this._croppingArea.trigger('set-image', initialImage.src, initialImage.coordinates);
       this._enableImageManipulation();
@@ -144,16 +146,21 @@ const HelicropterView = View.extend({
 
   _bindSubsections() {
     this._croppingArea.relay(this._zoomSlider, 'scale');
-    this._croppingArea.relay(this._uploadArea, 'set-image');
     this._zoomSlider.relay(this._croppingArea, 'image-loaded');
 
     this.listenTo(this._uploadArea, {
       'image-uploading'() {
         this._disableImageManipulation();
+        this.trigger('image:uploading');
       },
 
-      'image-uploaded'(url) {
+      'image-uploaded'({ src, url }) {
+        this._enableImageManipulation();
+
         this._url = url;
+        this._src = src;
+
+        this._croppingArea.trigger('set-image', src);
         this.trigger('image:uploaded', url);
       },
 
@@ -161,10 +168,6 @@ const HelicropterView = View.extend({
         this.trigger('remove-image');
         this.trigger('error:upload', err);
       }
-    });
-    this._uploadArea.on('set-image', () => {
-      this._enableImageManipulation();
-      this.trigger('image:uploading');
     });
 
     this.on('remove-image', () => this._disableImageManipulation());
@@ -189,6 +192,7 @@ const HelicropterView = View.extend({
       this._uploadArea.on('set-image', () => this._suggestionArea.reset());
       this._suggestionArea.on('set-image', ({ url, src }) => {
         this._url = url;
+        this._src = src;
         this._enableImageManipulation();
         this._croppingArea.trigger('set-image', src);
       });
@@ -211,6 +215,7 @@ const HelicropterView = View.extend({
   },
 
   _disableImageManipulation() {
+    delete this._src;
     delete this._url;
 
     this._uploadArea.show();
