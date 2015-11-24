@@ -174,7 +174,20 @@ export default View.extend({
       this._image.sendToBack();
       this._image.bringForward();
 
-      this._image.scale(coordinates.scale || 1.0).setCoords();
+      let scale = 1.0;
+      if (typeof coordinates.scale !== 'undefined') {
+        scale = coordinates.scale;
+      }
+      else if (typeof coordinates.width !== 'undefined' && typeof coordinates.height !== 'undefined') {
+        const widthScale = this._getCropAreaProp('width') / coordinates.width;
+        const heightScale = this._getCropAreaProp('height') / coordinates.height;
+
+        if (Math.abs(widthScale - heightScale) < 0.01) {
+          scale = widthScale;
+        }
+      }
+
+      this._image.scale(scale).setCoords();
       this._image.center();
 
       if (typeof coordinates.x !== 'undefined') {
@@ -196,7 +209,8 @@ export default View.extend({
 
       this.trigger('image-loaded', {
         width: this._image.get('width'),
-        height: this._image.get('height')
+        height: this._image.get('height'),
+        scale
       });
 
       this._broadcastDataURL();

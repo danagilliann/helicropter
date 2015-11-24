@@ -78,18 +78,10 @@ const HelicropterView = View.extend({
   },
 
   _addZoomSlider() {
-    const initialImage = this._model.get('initialImage');
-    let initialScale = 1.0;
-
-    if (initialImage && initialImage.coordinates && typeof initialImage.coordinates.scale !== 'undefined') {
-      initialScale = initialImage.coordinates.scale;
-    }
-
     this._zoomSlider = new ZoomSlider({
       cropWidth: this._model.get('cropSize').width,
       cropHeight: this._model.get('cropSize').height,
-      allowTransparency: this._model.get('allowTransparency'),
-      initialScale
+      allowTransparency: this._model.get('allowTransparency')
     });
     this._zoomSlider.render(this.$view.find('.js-crop-controls'));
   },
