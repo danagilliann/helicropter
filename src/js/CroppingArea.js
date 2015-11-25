@@ -6,6 +6,7 @@ import { fabric } from 'fabric';
 import transparencyImage from '../img/bg-cropper.gif';
 import template from 'hgn!../templates/crop-area';
 
+const DEFAULT_SCALE = 1.0;
 const MINIMUM_SCALE_DIFFERENCE = 0.01;
 const MINIMUM_PADDING = 20;
 
@@ -236,25 +237,23 @@ export default View.extend({
   },
 
   _initialScaleValue({ scale: initialScale, width, height }) {
-    let scale = 1.0;
-
     if (typeof initialScale !== 'undefined') {
-      scale = initialScale;
+      return initialScale;
     }
-    else if (typeof width !== 'undefined' && typeof height !== 'undefined') {
+
+    if (typeof width !== 'undefined' && typeof height !== 'undefined') {
       const widthScale = this._getCropAreaProp('width') / width;
       const heightScale = this._getCropAreaProp('height') / height;
 
-      // It's possilbe that the width and height provided are in a different
+      // It's possible that the width and height provided are in a different
       // aspect ratio than the current aspect ratio set. If this is the case,
-      // we want to ignore the calculated scales and fallback to the default
-      // scale.
+      // ignore the calculated scales.
       if (Math.abs(widthScale - heightScale) < MINIMUM_SCALE_DIFFERENCE) {
-        scale = widthScale;
+        return widthScale;
       }
     }
 
-    return scale;
+    return DEFAULT_SCALE;
   },
 
   _scaleImage(scaleValue) {

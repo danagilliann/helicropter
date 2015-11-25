@@ -2,7 +2,8 @@ import View from 'beff/View';
 
 import template from 'hgn!../templates/zoom-slider';
 
-const INITIAL_SCALE = 1.0;
+const MAX_SCALE = 1.0;
+const TOTAL_STEPS = 100;
 
 export default View.extend({
   mustache: template,
@@ -13,11 +14,11 @@ export default View.extend({
     this._super();
 
     this.on({
-      'image-loaded'({ width, height, scale, cropWidth, cropHeight }) {
-        this._width = width || this._width;
-        this._height = height || this._height;
-        this._cropWidth = cropWidth || this._cropWidth;
-        this._cropHeight = cropHeight || this._cropHeight;
+      'image-loaded'({ scale, width = this._width, height = this._height, cropWidth = this._cropWidth, cropHeight = this._cropHeight }) { // jshint ignore:line
+        this._width = width;
+        this._height = height;
+        this._cropWidth = cropWidth;
+        this._cropHeight = cropHeight;
 
         this._calculateScaleAttrs(scale);
       },
@@ -59,7 +60,7 @@ export default View.extend({
     const heightScaleMin = this._cropHeight / this._height;
 
     this._scaleMin = this._lowerBoundFn(widthScaleMin, heightScaleMin);
-    this._scaleStep = (1.0 - this._scaleMin) / 100;
+    this._scaleStep = (MAX_SCALE - this._scaleMin) / TOTAL_STEPS;
 
     if (initialScale) {
       const initialValue = Math.max(initialScale - this._scaleMin, 0);
@@ -72,8 +73,8 @@ export default View.extend({
 
     const value = this._$slider.val();
 
-    if (value === 100) {
-      return 1.0;
+    if (value === TOTAL_STEPS) {
+      return MAX_SCALE;
     }
 
     return this._scaleMin + (value * this._scaleStep);
