@@ -181,16 +181,17 @@ export default View.extend({
       this._image.sendToBack();
       this._image.bringForward();
 
-      const initialScale = this._initialScaleValue(coordinates);
-      this._image.scale(initialScale).setCoords();
+      const normalizedCoordinates = this._normalizeCoordinates(coordinates);
+
+      this._image.scale(normalizedCoordinates.scale).setCoords();
       this._image.center();
 
-      if (typeof coordinates.x !== 'undefined') {
-        this._image.set('left', this._getCropAreaProp('left') - coordinates.x);
+      if (normalizedCoordinates.x !== null) {
+        this._image.set('left', this._getCropAreaProp('left') - normalizedCoordinates.x);
       }
 
-      if (typeof coordinates.y !== 'undefined') {
-        this._image.set('top', this._getCropAreaProp('top') - coordinates.y);
+      if (normalizedCoordinates.y !== null) {
+        this._image.set('top', this._getCropAreaProp('top') - normalizedCoordinates.y);
       }
 
       this._image.setCoords();
@@ -205,7 +206,7 @@ export default View.extend({
       this.trigger('image-loaded', {
         width: this._image.get('width'),
         height: this._image.get('height'),
-        scale: initialScale,
+        scale: normalizedCoordinates.scale,
         cropWidth: this._model.cropWidth,
         cropHeight: this._model.cropHeight
       });
@@ -236,24 +237,37 @@ export default View.extend({
     });
   },
 
-  _initialScaleValue({ scale: initialScale, width, height }) {
-    if (typeof initialScale !== 'undefined') {
-      return initialScale;
+  _normalizeCoordinates(coordinates = {}) {
+    coordinates = extend({
+      x: null,
+      y: null,
+      width: null,
+      height: null,
+      scale: DEFAULT_SCALE
+    }, coordinates);
+
+    if (coordinates.width === null && coordinates.height === null) {
+      return coordinates;
     }
 
-    if (typeof width !== 'undefined' && typeof height !== 'undefined') {
-      const widthScale = this._getCropAreaProp('width') / width;
-      const heightScale = this._getCropAreaProp('height') / height;
+    const widthScale = this._getCropAreaProp('width') / coordinates.width;
+    const heightScale = this._getCropAreaProp('height') / coordinates.height;
 
-      // It's possible that the width and height provided are in a different
-      // aspect ratio than the current aspect ratio set. If this is the case,
-      // ignore the calculated scales.
-      if (Math.abs(widthScale - heightScale) < MINIMUM_SCALE_DIFFERENCE) {
-        return widthScale;
-      }
+    // It's possible that the width and height provided are in a different
+    // aspect ratio than the current aspect ratio set. If this is the case,
+    // ignore the calculated scales and reset the offset point.
+    if (Math.abs(widthScale - heightScale) < MINIMUM_SCALE_DIFFERENCE) {
+      coordinates.scale = widthScale;
+      coordinates.x = coordinates.x !== null ? coordinates.x * widthScale : null;
+      coordinates.y = coordinates.y  !== null ? coordinates.y * widthScale : null;
+    }
+    else {
+      coordinates.scale = DEFAULT_SCALE;
+      coordinates.x = null;
+      coordinates.y = null;
     }
 
-    return DEFAULT_SCALE;
+    return coordinates;
   },
 
   _scaleImage(scaleValue) {
