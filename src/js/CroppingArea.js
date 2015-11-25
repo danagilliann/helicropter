@@ -6,7 +6,8 @@ import { fabric } from 'fabric';
 import transparencyImage from '../img/bg-cropper.gif';
 import template from 'hgn!../templates/crop-area';
 
-const minimumPadding = 20;
+const MINIMUM_SCALE_DIFFERENCE = 0.01;
+const MINIMUM_PADDING = 20;
 
 export default View.extend({
   mustache: template,
@@ -78,6 +79,11 @@ export default View.extend({
         }
 
         this._createStaticCropArea();
+
+        this.trigger('set-crop-size', {
+          width: this._model.cropWidth,
+          height: this._model.cropHeight
+        });
       }
     });
   },
@@ -108,8 +114,8 @@ export default View.extend({
   },
 
   _setCropSizeByAspectRatio(ratio) {
-    const maxWidth = this._model.canvasWidth - (minimumPadding * 2);
-    const maxHeight = this._model.canvasHeight - (minimumPadding * 2);
+    const maxWidth = this._model.canvasWidth - (MINIMUM_PADDING * 2);
+    const maxHeight = this._model.canvasHeight - (MINIMUM_PADDING * 2);
 
     const widthAtMaxHeight = (maxHeight / ratio.height) * ratio.width;
     const heightAtMaxWidth = (maxWidth / ratio.width) * ratio.height;
@@ -174,20 +180,8 @@ export default View.extend({
       this._image.sendToBack();
       this._image.bringForward();
 
-      let scale = 1.0;
-      if (typeof coordinates.scale !== 'undefined') {
-        scale = coordinates.scale;
-      }
-      else if (typeof coordinates.width !== 'undefined' && typeof coordinates.height !== 'undefined') {
-        const widthScale = this._getCropAreaProp('width') / coordinates.width;
-        const heightScale = this._getCropAreaProp('height') / coordinates.height;
-
-        if (Math.abs(widthScale - heightScale) < 0.01) {
-          scale = widthScale;
-        }
-      }
-
-      this._image.scale(scale).setCoords();
+      const initialScale = this._initialScaleValue(coordinates);
+      this._image.scale(initialScale).setCoords();
       this._image.center();
 
       if (typeof coordinates.x !== 'undefined') {
@@ -210,7 +204,9 @@ export default View.extend({
       this.trigger('image-loaded', {
         width: this._image.get('width'),
         height: this._image.get('height'),
-        scale
+        scale: initialScale,
+        cropWidth: this._model.cropWidth,
+        cropHeight: this._model.cropHeight
       });
 
       this._broadcastDataURL();
@@ -237,6 +233,28 @@ export default View.extend({
         scale: scale
       }
     });
+  },
+
+  _initialScaleValue({ scale: initialScale, width, height }) {
+    let scale = 1.0;
+
+    if (typeof initialScale !== 'undefined') {
+      scale = initialScale;
+    }
+    else if (typeof width !== 'undefined' && typeof height !== 'undefined') {
+      const widthScale = this._getCropAreaProp('width') / width;
+      const heightScale = this._getCropAreaProp('height') / height;
+
+      // It's possilbe that the width and height provided are in a different
+      // aspect ratio than the current aspect ratio set. If this is the case,
+      // we want to ignore the calculated scales and fallback to the default
+      // scale.
+      if (Math.abs(widthScale - heightScale) < MINIMUM_SCALE_DIFFERENCE) {
+        scale = widthScale;
+      }
+    }
+
+    return scale;
   },
 
   _scaleImage(scaleValue) {

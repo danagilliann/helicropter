@@ -2,18 +2,37 @@ import View from 'beff/View';
 
 import template from 'hgn!../templates/zoom-slider';
 
+const INITIAL_SCALE = 1.0;
+
 export default View.extend({
   mustache: template,
 
-  init({ cropWidth, cropHeight, allowTransparency, initialScale }) {
-    this._cropWidth = cropWidth;
-    this._cropHeight = cropHeight;
-    this._initialScale = initialScale || 1.0;
+  init({ allowTransparency }) {
     this._lowerBoundFn = allowTransparency ? Math.min : Math.max;
 
     this._super();
 
-    this.on('image-loaded', (imageDimensions) => this._calculateScaleAttrs(imageDimensions));
+    this.on({
+      'image-loaded'({ width, height, scale, cropWidth, cropHeight }) {
+        this._width = width || this._width;
+        this._height = height || this._height;
+        this._cropWidth = cropWidth || this._cropWidth;
+        this._cropHeight = cropHeight || this._cropHeight;
+
+        this._calculateScaleAttrs(scale);
+      },
+
+      'set-crop-size'({ width, height }) {
+        this._cropWidth = width;
+        this._cropHeight = height;
+
+        if (this._width && this._height) {
+          const previousScale = this._currentScale();
+          this._calculateScaleAttrs(previousScale);
+          this.trigger('scale', this._currentScale());
+        }
+      }
+    });
   },
 
   rendered() {
@@ -35,15 +54,15 @@ export default View.extend({
     this._$slider.prop('disabled', false);
   },
 
-  _calculateScaleAttrs(imageDimensions) {
-    const widthScaleMin = this._cropWidth / imageDimensions.width;
-    const heightScaleMin = this._cropHeight / imageDimensions.height;
+  _calculateScaleAttrs(initialScale) {
+    const widthScaleMin = this._cropWidth / this._width;
+    const heightScaleMin = this._cropHeight / this._height;
 
     this._scaleMin = this._lowerBoundFn(widthScaleMin, heightScaleMin);
     this._scaleStep = (1.0 - this._scaleMin) / 100;
 
-    if (imageDimensions.scale) {
-      const initialValue = Math.max(imageDimensions.scale - this._scaleMin, 0);
+    if (initialScale) {
+      const initialValue = Math.max(initialScale - this._scaleMin, 0);
       this._$slider.val(Math.round(initialValue / this._scaleStep)).trigger('change');
     }
   },
