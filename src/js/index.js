@@ -78,18 +78,8 @@ const HelicropterView = View.extend({
   },
 
   _addZoomSlider() {
-    const initialImage = this._model.get('initialImage');
-    let initialScale = 1.0;
-
-    if (initialImage && initialImage.coordinates && typeof initialImage.coordinates.scale !== 'undefined') {
-      initialScale = initialImage.coordinates.scale;
-    }
-
     this._zoomSlider = new ZoomSlider({
-      cropWidth: this._model.get('cropSize').width,
-      cropHeight: this._model.get('cropSize').height,
-      allowTransparency: this._model.get('allowTransparency'),
-      initialScale
+      allowTransparency: this._model.get('allowTransparency')
     });
     this._zoomSlider.render(this.$view.find('.js-crop-controls'));
   },
@@ -146,7 +136,7 @@ const HelicropterView = View.extend({
 
   _bindSubsections() {
     this._croppingArea.relay(this._zoomSlider, 'scale');
-    this._zoomSlider.relay(this._croppingArea, 'image-loaded');
+    this._zoomSlider.relay(this._croppingArea, 'image-loaded set-crop-size');
 
     this.listenTo(this._uploadArea, {
       'image-uploading'() {

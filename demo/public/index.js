@@ -53,6 +53,8 @@ define([
       coordinates: {
         x: 0,
         y: 0,
+        //height: 836,
+        //width: 1113
         scale: 0.25
       }
     },
