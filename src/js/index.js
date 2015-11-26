@@ -138,6 +138,8 @@ const HelicropterView = View.extend({
     this._croppingArea.relay(this._zoomSlider, 'scale');
     this._zoomSlider.relay(this._croppingArea, 'image-loaded set-crop-size');
 
+    this._croppingArea.on('image-loaded', () => this.trigger('image:loaded'));
+
     this.listenTo(this._uploadArea, {
       'image-uploading'() {
         this._disableImageManipulation();
@@ -250,7 +252,7 @@ const Helicropter = Controller.extend({
   init(model) {
     this._super(extend({}, this._defaults, model));
 
-    this.relay(this._view, 'controls:enabled controls:disabled image:uploading image:uploaded error:upload');
+    this.relay(this._view, 'controls:enabled controls:disabled image:uploading image:uploaded image:loaded error:upload');
   },
 
   crop() {
