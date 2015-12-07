@@ -6,7 +6,7 @@ import { fabric } from 'fabric';
 import transparencyImage from '../img/bg-cropper.gif';
 import template from 'hgn!../templates/crop-area';
 
-const DEFAULT_SCALE = 1.0;
+const MAX_SCALE = 1.0;
 const MINIMUM_SCALE_DIFFERENCE = 0.01;
 const MINIMUM_PADDING = 20;
 
@@ -82,8 +82,7 @@ export default View.extend({
         this._createStaticCropArea();
 
         this.trigger('set-crop-size', {
-          width: this._model.cropWidth,
-          height: this._model.cropHeight
+          minScale: this._calculateScaleBound()
         });
       }
     });
@@ -207,6 +206,7 @@ export default View.extend({
         width: this._image.get('width'),
         height: this._image.get('height'),
         scale: normalizedCoordinates.scale,
+        minScale: normalizedCoordinates.minScale,
         cropWidth: this._model.cropWidth,
         cropHeight: this._model.cropHeight
       });
@@ -238,12 +238,15 @@ export default View.extend({
   },
 
   _normalizeCoordinates(coordinates = {}) {
+    const minScale = this._calculateScaleBound();
+
     coordinates = extend({
       x: null,
       y: null,
       width: null,
       height: null,
-      scale: DEFAULT_SCALE
+      scale: minScale,
+      minScale: minScale
     }, coordinates);
 
     if (coordinates.width === null && coordinates.height === null) {
@@ -262,12 +265,22 @@ export default View.extend({
       coordinates.y = coordinates.y  !== null ? coordinates.y * widthScale : null;
     }
     else {
-      coordinates.scale = DEFAULT_SCALE;
+      coordinates.scale = minScale;
       coordinates.x = null;
       coordinates.y = null;
     }
 
     return coordinates;
+  },
+
+  _calculateScaleBound() {
+    if (!this._image) { return MAX_SCALE; }
+
+    const lowerBoundFn = this._model.allowTransparency ? Math.min : Math.max;
+    const widthScaleMin = this._model.cropWidth / this._image.get('width');
+    const heightScaleMin = this._model.cropHeight / this._image.get('height');
+
+    return lowerBoundFn(widthScaleMin, heightScaleMin);
   },
 
   _scaleImage(scaleValue) {

@@ -71,6 +71,7 @@ const HelicropterView = View.extend({
       cropHeight: this._model.get('cropSize').height,
       viewportRatio: this._model.get('viewportRatio'),
       cropRatio: this._model.get('cropRatio'),
+      allowTransparency: this._model.get('allowTransparency'),
       previewMode: this._model.get('previewMode'),
       shouldBroadcastDataURL: !!this._model.get('previewCrop')
     });
@@ -78,9 +79,7 @@ const HelicropterView = View.extend({
   },
 
   _addZoomSlider() {
-    this._zoomSlider = new ZoomSlider({
-      allowTransparency: this._model.get('allowTransparency')
-    });
+    this._zoomSlider = new ZoomSlider();
     this._zoomSlider.render(this.$view.find('.js-crop-controls'));
   },
 

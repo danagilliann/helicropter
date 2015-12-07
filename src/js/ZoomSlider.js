@@ -8,41 +8,29 @@ const TOTAL_STEPS = 100;
 export default View.extend({
   mustache: template,
 
-  init({ allowTransparency }) {
-    this._lowerBoundFn = allowTransparency ? Math.min : Math.max;
-
-    this._super();
+  rendered() {
+    this._$slider = this.$view.find('.js-scale-slider');
+    this._$slider.on('input', () => this.trigger('scale', this._currentScale()));
 
     this.on({
-      'image-loaded'({ scale, width = this._width, height = this._height, cropWidth = this._cropWidth, cropHeight = this._cropHeight }) { // jshint ignore:line
-        this._width = width;
-        this._height = height;
-        this._cropWidth = cropWidth;
-        this._cropHeight = cropHeight;
-
-        this._calculateScaleAttrs(scale);
+      'image-loaded'({ scale, minScale }) {
+        this._scaleMin = minScale;
+        this._calculateScaleStep(scale);
       },
 
-      'set-crop-size'({ width, height }) {
-        this._cropWidth = width;
-        this._cropHeight = height;
+      'set-crop-size'({ minScale }) {
+        const previousScale = this._currentScale();
 
-        if (this._width && this._height) {
-          const previousScale = this._currentScale();
-          this._calculateScaleAttrs(previousScale);
-          this.trigger('scale', this._currentScale());
-        }
+        this._scaleMin = minScale;
+
+        this._calculateScaleStep(previousScale, minScale);
+        this.trigger('scale', this._currentScale());
       }
     });
   },
 
-  rendered() {
-    this._$slider = this.$view.find('.js-scale-slider');
-    this._$slider.on('input', () => this.trigger('scale', this._currentScale()));
-  },
-
   reset() {
-    this._$slider.val(100).trigger('change');
+    this._$slider.val(0).trigger('change');
   },
 
   disable() {
@@ -55,11 +43,7 @@ export default View.extend({
     this._$slider.prop('disabled', false);
   },
 
-  _calculateScaleAttrs(initialScale) {
-    const widthScaleMin = this._cropWidth / this._width;
-    const heightScaleMin = this._cropHeight / this._height;
-
-    this._scaleMin = this._lowerBoundFn(widthScaleMin, heightScaleMin);
+  _calculateScaleStep(initialScale) {
     this._scaleStep = (MAX_SCALE - this._scaleMin) / TOTAL_STEPS;
 
     if (initialScale) {
@@ -69,7 +53,7 @@ export default View.extend({
   },
 
   _currentScale() {
-    if (!this._scaleMin || !this._scaleStep) { return; }
+    if (!this._scaleStep) { return; }
 
     const value = this._$slider.val();
 
