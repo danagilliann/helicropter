@@ -69,6 +69,7 @@ const HelicropterView = View.extend({
       canvasHeight: this._model.get('canvasSize').height,
       cropWidth: this._model.get('cropSize').width,
       cropHeight: this._model.get('cropSize').height,
+      displayedWidth: this._model.get('displayedWidth'),
       viewportRatio: this._model.get('viewportRatio'),
       cropRatio: this._model.get('cropRatio'),
       allowTransparency: this._model.get('allowTransparency'),

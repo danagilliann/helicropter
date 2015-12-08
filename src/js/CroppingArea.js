@@ -10,6 +10,8 @@ const MAX_SCALE = 1.0;
 const MINIMUM_SCALE_DIFFERENCE = 0.01;
 const MINIMUM_PADDING = 20;
 
+const animationRequest = Symbol('animation request');
+
 export default View.extend({
   mustache: template,
 
@@ -42,11 +44,13 @@ export default View.extend({
     }
 
     this._createImage();
+    this._createBlurryWarning();
 
     this.on({
       scale(scaleValue) {
         if (this._image) {
           this._scaleImage(scaleValue);
+          this._checkPotentialBlurriness(scaleValue);
         }
       },
 
@@ -193,8 +197,10 @@ export default View.extend({
         this._image.set('top', this._getCropAreaProp('top') - normalizedCoordinates.y);
       }
 
+      this._checkPotentialBlurriness(normalizedCoordinates.scale);
+
       this._image.setCoords();
-      this._canvas.renderAll();
+      this._renderCanvas();
 
       this._image.on('moving', () => {
         this._checkImageBounds();
@@ -311,9 +317,20 @@ export default View.extend({
     this._image.setCoords();
 
     this._checkImageBounds();
-    this._canvas.renderAll();
+    this._renderCanvas();
 
     this._broadcastDataURL();
+  },
+
+  _checkPotentialBlurriness(currentScale) {
+    if (!this._model.displayedWidth || !currentScale) { return; }
+
+    if (this._cropArea.getWidth() / currentScale < this._model.displayedWidth) {
+      this._showBlurryWarning();
+    }
+    else {
+      this._hideBlurryWarning();
+    }
   },
 
   _checkImageBounds() {
@@ -517,12 +534,82 @@ export default View.extend({
     }
   },
 
+  _createBlurryWarning() {
+    if (!this._model.displayedWidth) { return; }
+
+    const warningBox = new fabric.Rect({
+      height: 40,
+      width: this._model.canvasWidth,
+      fill: 'rgba(37, 38, 42, 0.9)',
+      originX: 'center',
+      originY: 'center',
+      selectable: false,
+      evented: false
+    });
+
+    const warningMessage = new fabric.Text('This zoom level will blur your cover image', {
+      height: 40,
+      width: this._model.canvasWidth,
+      fill: 'rgba(255, 255, 255, 1.0)',
+      fontFamily: 'Helvetica Neue',
+      fontSize: 13,
+      fontWeight: 500,
+      originX: 'center',
+      originY: 'center',
+      textAlign: 'center'
+    });
+
+    this._warningBox = new fabric.Group([warningBox, warningMessage], {
+      top: this._model.canvasHeight,
+      left: 0,
+      height: 40,
+      width: this._model.canvasWidth,
+      originX: 'left',
+      originY: 'top',
+      selectable: false,
+      evented: false
+    });
+
+    this._canvas.add(this._warningBox);
+  },
+
+  _showBlurryWarning() {
+    if (!this._warningBox) { return; }
+
+    this._warningBox.bringToFront();
+    this._warningBox.animate('top', this._model.canvasHeight - 40, {
+      onChange: () => this._renderCanvas(),
+      duration: 250,
+      easing: fabric.util.ease.easeOutQuad
+    });
+  },
+
+  _hideBlurryWarning() {
+    if (!this._warningBox) { return; }
+
+    this._warningBox.animate('top', this._model.canvasHeight, {
+      onChange: () => this._renderCanvas(),
+      duration: 250,
+      easing: fabric.util.ease.easeInQuad
+    });
+  },
+
   _loadImage(imageData) {
     return new Promise((resolve, reject) => {
       const image = new Image();
       image.onerror = () => reject();
       image.onload = () => resolve(image);
       image.src = imageData;
+    });
+  },
+
+  _renderCanvas() {
+    if (!this._canvas || this[animationRequest]) { return; }
+
+    this[animationRequest] = true;
+    window.requestAnimationFrame(() => {
+      this._canvas.renderAll();
+      this[animationRequest] = false;
     });
   }
 });
