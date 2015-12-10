@@ -19,8 +19,10 @@ export default View.extend({
       },
 
       'set-crop-size'({ minScale }) {
+        const previousScale = this._currentScale();
+
         this._scaleMin = minScale;
-        this._calculateScaleStep(this._currentScale());
+        this._calculateScaleStep(previousScale);
         this.trigger('scale', this._currentScale());
       }
     });
