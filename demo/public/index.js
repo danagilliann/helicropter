@@ -32,6 +32,7 @@ define([
       width: 320,
       height: 250
     },
+    displayedWidth: 500,
     //previewCrop: {
       //element: $('.js-preview-crop-container'),
       //size: {
