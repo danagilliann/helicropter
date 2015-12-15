@@ -1,5 +1,7 @@
 # `helicropter` 
 
+[![Build Status](https://travis-ci.org/behance/helicropter.svg?branch=master)](https://travis-ci.org/behance/helicropter)
+
 > S3 Uploader / Cropper for all your uploading and cropping needs
 
 ```
