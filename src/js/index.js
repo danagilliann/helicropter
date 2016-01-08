@@ -38,10 +38,14 @@ const HelicropterView = View.extend({
   getCropData() {
     if (!this._url) { return; }
 
+    const coordinates = this._croppingArea.getCropData();
+
+    if (!coordinates) { return; }
+
     return {
       src: this._src,
       url: this._url,
-      coordinates: this._croppingArea.getCropData()
+      coordinates
     };
   },
 
