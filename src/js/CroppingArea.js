@@ -108,6 +108,8 @@ export default View.extend({
   },
 
   getCropData() {
+    if (!this._image) { return; }
+
     return {
       x: (this._getImageProp('left') * -1) + this._getCropAreaProp('left'),
       y: (this._getImageProp('top') * -1) + this._getCropAreaProp('top'),

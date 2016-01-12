@@ -19,4 +19,10 @@ describe('CroppingArea', function() {
   it('renders', function() {
     expect(this.$el.find('.js-cropper-canvas')).toExist();
   });
+
+  describe('#getCropData', function() {
+    it('returns undefined if no image is defined', function() {
+      expect(this.croppingArea.getCropData()).not.toBeDefined();
+    });
+  });
 });
