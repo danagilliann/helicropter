@@ -5,6 +5,31 @@ import View from 'beff/View';
 
 import template from 'hgn!../templates/upload-area';
 
+const SPINNER_OPTIONS = {
+  lines: 40,
+  length: 1,
+  width: 2,
+  radius: 10,
+  scale: 1,
+  corners: 1,
+  color: '#fff',
+  opacity: 0.1,
+  rotate: 0,
+  direction: 1,
+  speed: 1,
+  trail: 46,
+  fps: 20,
+  zIndex: 1,
+  // Namespace the spinner class to prevent css collisions with more generic
+  // application specific spinners.
+  className: 'helicropter-spinner',
+  top: '50%',
+  left: '50%',
+  shadow: false,
+  hwaccel: true,
+  position: 'absolute'
+};
+
 const Uploader = CloudUploader.extend({
   init($uploadBtn, options) {
     let config = {};
@@ -59,28 +84,7 @@ export default View.extend({
     this._$btn = this.$view.find('.js-upload-button');
 
     this._uploader = new Uploader(this._$btn[0], this._model.uploaderOptions);
-    this._spinner = new Spinner({
-      lines: 40,
-      length: 1,
-      width: 2,
-      radius: 10,
-      scale: 1,
-      corners: 1,
-      color: '#fff',
-      opacity: 0.1,
-      rotate: 0,
-      direction: 1,
-      speed: 1,
-      trail: 46,
-      fps: 20,
-      zIndex: 1,
-      className: 'spinner',
-      top: '50%',
-      left: '50%',
-      shadow: false,
-      hwaccel: true,
-      position: 'absolute'
-    });
+    this._spinner = new Spinner(SPINNER_OPTIONS);
 
     this._$container.css({
       width: this._model.width,
