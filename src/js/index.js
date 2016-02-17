@@ -77,8 +77,7 @@ const HelicropterView = View.extend({
       viewportRatio: this._model.get('viewportRatio'),
       cropRatio: this._model.get('cropRatio'),
       allowTransparency: this._model.get('allowTransparency'),
-      previewMode: this._model.get('previewMode'),
-      shouldBroadcastDataURL: !!this._model.get('previewCrop')
+      previewMode: this._model.get('previewMode')
     });
     this._croppingArea.render(this.$view.find('.js-crop-container'));
   },
@@ -109,15 +108,17 @@ const HelicropterView = View.extend({
 
   _addPreviewCrop() {
     const config = this._model.get('previewCrop');
-    if (config) {
-      if (!config.element) {
-        throw new Error('previewCrop.element must be supplied in the configuration');
-      }
-      this._previewCrop = new PreviewCrop({
-        size: config.size
-      });
-      this._previewCrop.render(config.element);
+
+    if (!config) {
+      return;
     }
+
+    if (!config.element) {
+      throw new Error('previewCrop.element must be supplied in the configuration');
+    }
+
+    this._previewCrop = new PreviewCrop();
+    this._previewCrop.render(config.element);
   },
 
   _setInitialState() {
@@ -195,7 +196,7 @@ const HelicropterView = View.extend({
     }
 
     if (this._model.get('previewCrop')) {
-      this._previewCrop.relay(this._croppingArea, 'data-url');
+      this._previewCrop.relay(this._croppingArea, 'moving image-loaded scaling');
     }
   },
 
