@@ -207,42 +207,27 @@ export default View.extend({
       this._image.on('moving', () => {
         this._checkImageBounds();
         this._canvas.setActiveObject(this._cropArea);
-        this._broadcastDataURL();
+        this.trigger('moving', this._getImageInfo());
       });
 
-      this.trigger('image-loaded', {
+      this.trigger('image-loaded', extend(this._getImageInfo(), {
         width: this._image.get('width'),
         height: this._image.get('height'),
         scale: normalizedCoordinates.scale,
         minScale: normalizedCoordinates.minScale,
         cropWidth: this._model.cropWidth,
-        cropHeight: this._model.cropHeight
-      });
-
-      this._broadcastDataURL();
+        cropHeight: this._model.cropHeight,
+        image: this._model.image
+      }));
     });
   },
 
-  _broadcastDataURL() {
-    if (!this._model.shouldBroadcastDataURL) { return; }
-
-    const {width, height, scale} = this.getCropData();
-    const dataUrl = this._canvas.toDataURL({
-      left: this._getCropAreaProp('left'),
-      top: this._getCropAreaProp('top'),
-      width,
-      height
-    });
-
-    this.trigger('data-url', {
-      dataUrl,
-      // For scaling needs
-      cropArea: {
-        width: width,
-        height: height,
-        scale: scale
-      }
-    });
+  _getImageInfo() {
+    return {
+      left: this._image.get('left') - this._getCropAreaProp('left'),
+      top: this._image.get('top') - this._getCropAreaProp('top'),
+      scale: this._image.getScaleX()
+    };
   },
 
   _normalizeCoordinates(coordinates = {}) {
@@ -319,9 +304,10 @@ export default View.extend({
     this._image.setCoords();
 
     this._checkImageBounds();
-    this._renderCanvas();
 
-    this._broadcastDataURL();
+    this.trigger('scaling', this._getImageInfo());
+
+    this._renderCanvas();
   },
 
   _checkPotentialBlurriness(currentScale) {
