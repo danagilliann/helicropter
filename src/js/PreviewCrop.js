@@ -12,7 +12,6 @@ export default View.extend({
 
   rendered() {
     this.on('moving', this._adjustImagePosition);
-    this.on('scaling', this._onImageScale);
     this.on('image-loaded', this.renderImage);
   },
 
@@ -26,6 +25,8 @@ export default View.extend({
 
     return this._loadImage(image)
     .then(image => {
+      this.on('scaling', this._onImageScale);
+
       this._drawNewImage({image, scale});
       this._adjustImagePosition({top, left});
       this._renderCanvas();

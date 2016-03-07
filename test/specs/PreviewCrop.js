@@ -34,6 +34,18 @@ describe('PreviewCrop', function() {
     expect(this.$canvas).toExist();
   });
 
+  it('does not throw if scaling happens before the image is loaded', function() {
+    const previewCrop = createPreviewCrop(this.$el);
+    expect(() => {
+      previewCrop.trigger('scaling', {
+        scale: 1,
+        left: 10,
+        top: 10
+      });
+    }).not.toThrow();
+    previewCrop.destroy();
+  });
+
   describe('when given an image', function() {
     it('renders a scaled down version', function() {
       expect(this.$canvas).toHaveCss({
