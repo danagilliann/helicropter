@@ -73,4 +73,6 @@ define([
     console.error('Error:', err.message);
   });
   window.cropper = cropper;
+
+  $('.removeImage').on('click', function() { cropper.removeImage(); });
 });

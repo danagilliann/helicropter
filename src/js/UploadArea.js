@@ -4,6 +4,7 @@ import CloudUploader from 'beff/Component/CloudUploader';
 import View from 'beff/View';
 
 import template from 'hgn!../templates/upload-area';
+import uploadIcon from 'hgn!../templates/icons/upload';
 
 const SPINNER_OPTIONS = {
   lines: 40,
@@ -71,8 +72,12 @@ export default View.extend({
 
   mustache: template,
 
+  partials: {
+    uploadIcon: uploadIcon.template
+  },
+
   templateData() {
-    this._model.titleText = this._model.titleText || this._defaults.titleText;
+    this._model.titleText = this._model.titleText == null ? this._defaults.titleText : this._model.titleText;
     this._model.subtitleText = this._model.subtitleText || this._defaults.subtitleText;
 
     return this._model;
