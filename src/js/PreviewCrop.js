@@ -1,6 +1,7 @@
 import View from 'beff/View';
 import { fabric } from 'fabric';
 import mustache from 'hgn!../templates/preview-crop';
+import uploadIcon from 'hgn!../templates/icons/upload';
 
 const animationRequest = Symbol('animation request');
 const proportion = 0.5;
@@ -10,12 +11,39 @@ export {proportion};
 export default View.extend({
   mustache,
 
+  partials: {
+    uploadIcon: uploadIcon.template
+  },
+
   rendered() {
     this.on('moving', this._adjustImagePosition);
     this.on('image-loaded', this.renderImage);
+    this.on('remove-image', this.removeImage);
+
+    this._$upload = this.$view.find('.js-preview-upload-container');
+
+    this._$upload.css({
+      width: this._model.cropWidth * proportion,
+      height: this._model.cropHeight * proportion
+    });
+
+    this._$upload.find('.js-upload-button').on('click', () => this.trigger('upload-image'));
+  },
+
+  removeImage() {
+    this._$upload.removeClass('hide');
+    this.$view.find('.js-preview-crop-canvas').addClass('hide');
+
+    if (this._image) {
+      this._canvas.remove(this._image);
+      this._image = null;
+    }
   },
 
   renderImage({image, scale, top, left, cropWidth, cropHeight}) {
+    this._$upload.addClass('hide');
+    this.$view.find('.js-preview-crop-canvas').removeClass('hide');
+
     // This happens in image rendering because at this point in the lifecycle,
     // The crop area's dimensions have already been adjusted beyond the dimensions
     // specified in the config
@@ -44,7 +72,13 @@ export default View.extend({
     this._canvas = new fabric.Canvas($canvas[0], {
       selection: false,
       renderOnAddRemove: false,
-      evented: false
+      evented: false,
+      // When the canvas is loaded with an image, fabric adds
+      // a container that we'd like to hide when switching to
+      // the no-image state. Without an initial image, there is
+      // no fabric wrapping container. This shared class lets us
+      // target both the container and/or the canvas
+      containerClass: 'js-preview-crop-canvas'
     });
   },
 

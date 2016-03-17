@@ -10,6 +10,8 @@ function createPreviewCrop($el) {
 
 describe('PreviewCrop', function() {
   beforeEach(function(done) {
+    setStyleFixtures('.hide { display: none; }');
+
     this.$el = affix('.js-preview-crop-parent');
     this.previewCrop = createPreviewCrop(this.$el);
     this.$canvas = this.$el.find('.js-preview-crop-canvas');
@@ -109,6 +111,27 @@ describe('PreviewCrop', function() {
 
       expect(newLeft).not.toBe(oldLeft);
       expect(newLeft).toBeLessThan(this.scaleData.left);
+    });
+  });
+
+  describe('when the main image is removed', function() {
+    beforeEach(function() {
+      this.previewCrop.trigger('remove-image');
+    });
+
+    it('shows an upload button', function() {
+      expect($('.js-upload-button')).toBeVisible();
+    });
+
+    it('hides the canvas', function() {
+      expect($('.js-preview-crop-canvas')).not.toBeVisible();
+    });
+
+    describe('and the user clicks on the upload button', function() {
+      it('requests that an image is uploaded', function(done) {
+        this.previewCrop.on('upload-image', done);
+        $('.js-upload-button').click();
+      });
     });
   });
 });
