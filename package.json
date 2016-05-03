@@ -20,7 +20,7 @@
   "homepage": "https://github.com/behance/helicropter#readme",
   "dependencies": {
     "beff": "^2.3.2",
-    "fabric": "behance/fabric.js#1.5.0-nodeless",
+    "fabric": "behance/fabric.js#1.6.1-nodeless",
     "jquery": "^2.1.4",
     "nbd": "^1.1.2",
     "spin.js": "^2.3.1"
