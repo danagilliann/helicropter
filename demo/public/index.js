@@ -25,12 +25,12 @@ define([
       }
     },
     canvasSize: {
-      width: 432,
-      height: 300
+      width: 576,
+      height: 362
     },
     cropSize: {
-      width: 320,
-      height: 250
+      width: 404,
+      height: 316
     },
     displayedWidth: 500,
     previewCrop: {
@@ -45,8 +45,8 @@ define([
     //uploadTitle: 'Upload a new cover image',
     //uploadSubtitle: 'This will not affect your Behance cover image',
     initialImage: {
-      src: '/imgs/test-kitten.jpeg',
-      url: 'https://foo.com/imgs/test-kitten.jpeg',
+      src: '/imgs/test-letters.png',
+      url: 'https://foo.com/imgs/test-letters.png',
       coordinates: {
         x: 0,
         y: 0,
@@ -56,11 +56,11 @@ define([
       }
     },
     //previewMode: true,
-    uploadBackgroundImage: '/imgs/test-kitten.jpeg',
+    uploadBackgroundImage: '/imgs/test-letters.png',
     showRatioLock: true,
     showSuggestions: true,
     suggestions: [
-      { src: '/imgs/test-kitten.jpeg', url: 'https://foo.com/imgs/test-kitten.jpeg', active: true },
+      { src: '/imgs/test-letters.png', url: 'https://foo.com/imgs/test-letters.png', active: true },
       { src: '/imgs/test-image-0.png', url: 'https://foo.com/imgs/test-image-0.png' },
       { src: '/imgs/test-image-1.png', url: 'https://foo.com/imgs/test-image-1.png' },
       { src: '/imgs/test-image-2.png', url: 'https://foo.com/imgs/test-image-2.png' },
