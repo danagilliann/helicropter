@@ -23,7 +23,8 @@ export default View.extend({
     });
 
     this._canvas = new fabric.Canvas(this._$canvas[0], {
-      selection: false
+      selection: false,
+      enableRetinaScaling: true
     });
 
     this._canvas.on('mouse:down', () => this._canvas.setActiveObject(this._cropArea));

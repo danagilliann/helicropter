@@ -72,6 +72,7 @@ export default View.extend({
     this._canvas = new fabric.Canvas($canvas[0], {
       selection: false,
       renderOnAddRemove: false,
+      enableRetinaScaling: true,
       evented: false,
       // When the canvas is loaded with an image, fabric adds
       // a container that we'd like to hide when switching to
