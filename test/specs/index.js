@@ -19,14 +19,22 @@ describe('Helicropter', function() {
         signature: {
           endpoint: '/s3handler'
         }
-      },
-      initialImage: {
-        src: '/imgs/test-kitten.jpeg',
-        url: 'https://foo.com/imgs/test-kitten.jpeg'
       }
     };
 
-    this._create = customConfig => {
+    this._createWithInitialImage = customConfig => {
+      const initialImage = {
+        initialImage: {
+          src: '/imgs/test-kitten.jpeg',
+          url: 'https://foo.com/imgs/test-kitten.jpeg'
+        }
+      };
+      const inst = new Helicropter(extend(this.defaultConfig, initialImage, customConfig));
+      inst.render($('.helicropter-container'));
+      return inst;
+    };
+
+    this._createWithoutInitialImage = customConfig => {
       const inst = new Helicropter(extend(this.defaultConfig, customConfig));
       inst.render($('.helicropter-container'));
       return inst;
@@ -40,7 +48,7 @@ describe('Helicropter', function() {
   describe('#crop', function() {
     describe('when cropping area does not have crop data', function() {
       beforeEach(function() {
-        this.helicropter = this._create();
+        this.helicropter = this._createWithInitialImage();
       });
 
       it('returns undefined', function() {
@@ -52,17 +60,35 @@ describe('Helicropter', function() {
 
   describe('when given an initial image', function() {
     beforeEach(function() {
-      this.helicropter = this._create();
+      this.helicropter = this._createWithInitialImage();
     });
 
     it('does not show the upload state for the cropper', function() {
       expect($('.js-upload-container .js-upload-button')).not.toBeVisible();
     });
+
+    it('shows the loading state for the cropper', function() {
+      expect($('.js-image-upload-wrapper .helicropter-spinner')).toBeVisible();
+    });
+  });
+
+  describe('when not given an initial image', function() {
+    beforeEach(function() {
+      this.helicropter = this._createWithoutInitialImage();
+    });
+
+    it('shows the upload state for the cropper', function() {
+      expect($('.js-upload-container .js-upload-button')).toBeVisible();
+    });
+
+    it('does not show the loading state for the cropper', function() {
+      expect($('.js-image-upload-wrapper .helicropter-spinner')).not.toBeVisible();
+    });
   });
 
   describe('when given preview crop configuration', function() {
     beforeEach(function() {
-      this.helicropter = this._create({
+      this.helicropter = this._createWithInitialImage({
         previewCrop: {
           element: $('.preview-crop-container')
         }
@@ -76,7 +102,7 @@ describe('Helicropter', function() {
 
   describe('when a user removes the initial image', function() {
     beforeEach(function() {
-      this.helicropter = this._create();
+      this.helicropter = this._createWithInitialImage();
       this.helicropter.removeImage();
     });
 

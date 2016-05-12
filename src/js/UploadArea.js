@@ -96,6 +96,10 @@ export default View.extend({
       height: this._model.height
     });
 
+    this._model.hasInitialImage ?
+      this._showLoadingState() :
+      this.showUploadState();
+
     this._bindUploader();
     this.on('upload-image', () => this._uploadImage());
   },
@@ -108,7 +112,7 @@ export default View.extend({
     this._$container.removeClass('hide');
   },
 
-  _showUploadState() {
+  showUploadState() {
     this._spinner.stop();
     this._$btn.removeClass('hide');
   },
@@ -131,7 +135,7 @@ export default View.extend({
       },
 
       complete({ file, uploadPath, uploadEndpoint, response }) {
-        this._showUploadState();
+        this.showUploadState();
 
         if (response && response.success) {
           this.hide();
@@ -142,7 +146,7 @@ export default View.extend({
       },
 
       error(err) {
-        this._showUploadState();
+        this.showUploadState();
 
         console.error(err);
         this.trigger('upload-error', err);
@@ -150,4 +154,3 @@ export default View.extend({
     });
   }
 });
-
