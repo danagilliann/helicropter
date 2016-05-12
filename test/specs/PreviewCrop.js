@@ -59,16 +59,16 @@ describe('PreviewCrop', function() {
 
   describe('when notified of movement from the main image', function() {
     it('updates the scaled position of the preview', function() {
-      const oldLeft = this.previewCrop._image.get('left');
-      const oldTop = this.previewCrop._image.get('top');
+      const oldLeft = parseInt(this.previewCrop._$image.css('left'), 10);
+      const oldTop = parseInt(this.previewCrop._$image.css('top'), 10);
 
       this.previewCrop.trigger('moving', {
         left: 100,
         top: 100
       });
 
-      const newLeft = this.previewCrop._image.get('left');
-      const newTop = this.previewCrop._image.get('top');
+      const newLeft = parseInt(this.previewCrop._$image.css('left'), 10);
+      const newTop = parseInt(this.previewCrop._$image.css('top'), 10);
 
       expect(newTop).not.toBe(oldTop);
       expect(newTop).toBeLessThan(100);
@@ -88,23 +88,24 @@ describe('PreviewCrop', function() {
     });
 
     it('also scales the preview', function() {
-      const oldScale = this.previewCrop._image.getScaleX();
+      const oldScale = 1;
+      const oldWidth = this.previewCrop._$image.width();
 
       this.previewCrop.trigger('scaling', this.scaleData);
 
-      const newScale = this.previewCrop._image.getScaleX();
-      expect(newScale).not.toBe(oldScale);
-      expect(newScale).toBeLessThan(this.scaleData.scale);
+      const newWidth = Math.round(this.previewCrop._$image.width());
+      const expectedWidth = Math.round(oldWidth * this.scaleData.scale);
+      expect(newWidth).toBe(expectedWidth);
     });
 
     it('adjusts the position of the preview image accordingly', function() {
-      const oldLeft = this.previewCrop._image.get('left');
-      const oldTop = this.previewCrop._image.get('top');
+      const oldLeft = parseInt(this.previewCrop._$image.css('left'), 10);
+      const oldTop = parseInt(this.previewCrop._$image.css('top'), 10);
 
       this.previewCrop.trigger('scaling', this.scaleData);
 
-      const newLeft = this.previewCrop._image.get('left');
-      const newTop = this.previewCrop._image.get('top');
+      const newLeft = parseInt(this.previewCrop._$image.css('left'), 10);
+      const newTop = parseInt(this.previewCrop._$image.css('top'), 10);
 
       expect(newTop).not.toBe(oldTop);
       expect(newTop).toBeLessThan(this.scaleData.top);
