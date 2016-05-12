@@ -23,9 +23,19 @@ export default View.extend({
     });
 
     this._canvas = new fabric.Canvas(this._$canvas[0], {
-      selection: false,
-      enableRetinaScaling: true
+      selection: false
     });
+
+    // IMPORTANT: Using undocumented Fabric.js API here to force retina-like behavior
+    // even on screens that are not retina. This is a hack to mitigate the lack of anti-aliasing
+    // in <canvas> until CroppingArea uses images.
+    //
+    // @see http://stackoverflow.com/questions/34869745/fabric-js-canvas-image-antialiasing
+    // @see http://www.deltalink.it/andreab/fabric/resize.html
+    const canvasScale = 2;
+    this._canvas.lowerCanvasEl.setAttribute('width', this._canvas.width * canvasScale);
+    this._canvas.lowerCanvasEl.setAttribute('height', this._canvas.height * canvasScale);
+    this._canvas.contextContainer.scale(canvasScale, canvasScale);
 
     this._canvas.on('mouse:down', () => this._canvas.setActiveObject(this._cropArea));
     this._canvas.on('mouse:move', () => this._canvas.setActiveObject(this._cropArea));
