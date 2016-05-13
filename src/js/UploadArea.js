@@ -46,8 +46,7 @@ const Uploader = CloudUploader.extend({
     $.extend(config, {
       drift: 0,
       cors: {
-        expected: true,
-        sendCredentials: true
+        expected: true
       },
       validation: {
         sizeLimit: 8388608,
