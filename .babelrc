@@ -1,0 +1,4 @@
+{
+  "presets": ["behance"],
+  "plugins": ["transform-runtime"]
+}

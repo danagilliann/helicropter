@@ -8,10 +8,7 @@ var commonLoaders = [
   {
     test: /(\.js)$/,
     exclude: /node_modules/,
-    loader: 'babel',
-    query: {
-      optional: ['runtime']
-    }
+    loader: 'babel'
   },
   { test: /\.(png|jpg|gif)$/, loader: 'url?limit=25000' }
 ];
