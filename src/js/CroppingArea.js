@@ -131,11 +131,11 @@ export default View.extend({
   },
 
   _setCropSizeByAspectRatio(ratio) {
-    const maxWidth = this._model.canvasWidth - (MINIMUM_PADDING * 2);
-    const maxHeight = this._model.canvasHeight - (MINIMUM_PADDING * 2);
+    const maxWidth = Math.round(this._model.canvasWidth - (MINIMUM_PADDING * 2));
+    const maxHeight = Math.round(this._model.canvasHeight - (MINIMUM_PADDING * 2));
 
-    const widthAtMaxHeight = (maxHeight / ratio.height) * ratio.width;
-    const heightAtMaxWidth = (maxWidth / ratio.width) * ratio.height;
+    const widthAtMaxHeight = Math.round((maxHeight / ratio.height) * ratio.width);
+    const heightAtMaxWidth = Math.round((maxWidth / ratio.width) * ratio.height);
 
     if (widthAtMaxHeight < maxWidth) {
       this._model.cropWidth = widthAtMaxHeight;
@@ -436,9 +436,7 @@ export default View.extend({
       lockRotation: true,
       hasRotatingPoint: false,
       cornerColor: 'rgba(255, 255, 255, 1.0)',
-      cornerSize: 5,
-      lockMovementX: true,
-      lockMovementY: true
+      cornerSize: 5
     });
 
     this._canvas.add(this._cropArea);
@@ -457,16 +455,26 @@ export default View.extend({
         y: this._image.get('top')
       };
 
+      this._startingCropPosition = {
+        x: this._cropArea.get('left'),
+        y: this._cropArea.get('top')
+      };
+
       this._startingPointer = this._canvas.getPointer(e);
     });
 
     this._cropArea.on('mouseup', () => {
       this._startingTransform = null;
+      this._startingCropPosition = null;
       this._startingPointer = null;
     });
 
     this._cropArea.on('moving', ({ e }) => {
       if (!this._image) { return; }
+
+      // forcably stop crop area from moving
+      this._cropArea.set('left', this._startingCropPosition.x);
+      this._cropArea.set('top', this._startingCropPosition.y);
 
       const currentPointer = this._canvas.getPointer(e);
 
@@ -491,20 +499,31 @@ export default View.extend({
     return Math.round(this._cropArea.get(prop));
   },
 
+  _getCropAreaWidth() {
+    return Math.round(this._getCropAreaProp('width') * this._cropArea.getScaleX());
+  },
+
+  _getCropAreaHeight() {
+    return Math.round(this._getCropAreaProp('height') * this._cropArea.getScaleY());
+  },
+
   _getImageProp(prop) {
     return Math.round(this._image.get(prop));
   },
 
   _createOverlay() {
+    const cropHeight = this._getCropAreaHeight();
+    const cropWidth = this._getCropAreaWidth();
+
     const topOffset = this._getCropAreaProp('top');
     const leftOffset = this._getCropAreaProp('left');
-    const rightOffset = Math.max(0, this._model.canvasWidth - (leftOffset + this._cropArea.getWidth()));
-    const bottomOffset = Math.max(0, this._model.canvasHeight - (topOffset + this._cropArea.getHeight()));
+    const rightOffset = Math.max(0, Math.round(this._model.canvasWidth - (leftOffset + cropWidth)));
+    const bottomOffset = Math.max(0, Math.round(this._model.canvasHeight - (topOffset + cropHeight)));
 
     const overlayRects = [
       { left: 0, top: 0, height: topOffset, width: this._model.canvasWidth }, // Top Bar
-      { left: 0, top: topOffset, height: this._cropArea.getHeight(), width: leftOffset }, // Left Bar
-      { left: this._model.canvasWidth - rightOffset, top: topOffset, height: this._cropArea.getHeight(), width: rightOffset }, // Right Bar
+      { left: 0, top: topOffset, height: cropHeight, width: leftOffset }, // Left Bar
+      { left: this._model.canvasWidth - rightOffset, top: topOffset, height: cropHeight, width: rightOffset }, // Right Bar
       { left: 0, top: this._model.canvasHeight - bottomOffset, height: bottomOffset, width: this._model.canvasWidth } // Bottom Bar
     ].map((box) => {
       const data = extend(box, {
