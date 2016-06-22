@@ -77,6 +77,10 @@ describe('ZoomSlider', function() {
         it('re-calculates the scaleStep', function() {
           expect(this.zoomSlider._scaleStep).toBe(0.01);
         });
+
+        it('resets the slider value to 0', function() {
+          expect(+this.zoomSlider.$view.find('.js-scale-slider').val()).toEqual(0);
+        });
       });
 
       describe('when triggered with a minScale and a current scale', function() {
