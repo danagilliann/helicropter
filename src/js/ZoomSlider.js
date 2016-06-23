@@ -42,13 +42,11 @@ export default View.extend({
     this._$slider.prop('disabled', false);
   },
 
-  _calculateScaleStep(initialScale) {
-    this._scaleStep = (MAX_SCALE - this._scaleMin) / TOTAL_STEPS;
+  _calculateScaleStep(initialScale = 0) {
+    const initialValue = Math.max(initialScale - this._scaleMin, 0);
 
-    if (initialScale) {
-      const initialValue = Math.max(initialScale - this._scaleMin, 0);
-      this._$slider.val(Math.round(initialValue / this._scaleStep)).trigger('change');
-    }
+    this._scaleStep = (MAX_SCALE - this._scaleMin) / TOTAL_STEPS;
+    this._$slider.val(Math.round(initialValue / this._scaleStep)).trigger('change');
   },
 
   _currentScale() {

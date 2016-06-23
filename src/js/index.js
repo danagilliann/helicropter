@@ -215,7 +215,6 @@ const HelicropterView = View.extend({
 
     this._croppingArea.show();
 
-    this._zoomSlider.reset();
     this._zoomSlider.enable();
 
     this.trigger('controls:enabled');

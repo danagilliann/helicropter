@@ -68,7 +68,7 @@ describe('Helicropter', function() {
     });
 
     it('shows the loading state for the cropper', function() {
-      expect($('.js-image-upload-wrapper .helicropter-spinner')).toBeVisible();
+      expect($('.js-image-upload-wrapper .helicropter-spinner')).toExist();
     });
   });
 
@@ -82,7 +82,7 @@ describe('Helicropter', function() {
     });
 
     it('does not show the loading state for the cropper', function() {
-      expect($('.js-image-upload-wrapper .helicropter-spinner')).not.toBeVisible();
+      expect($('.js-image-upload-wrapper .helicropter-spinner')).not.toExist();
     });
   });
 
