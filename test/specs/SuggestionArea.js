@@ -136,42 +136,5 @@ describe('SuggestionArea', function() {
         expect(this.$el.find('.js-suggestion-item').length).toBe(7);
       });
     });
-
-    describe('when there is an existing cover suggestion', function() {
-      beforeEach(function() {
-        this.$el.empty();
-
-        this.suggestionArea = createSuggestionArea(this.$el, {
-          suggestions: [
-            { src: 'blob:cover', url: 'http://path/to/cover', cover: true },
-            { src: 'blob:foo', url: 'http://path/to/foo' },
-            { src: 'blob:bar', url: 'http://path/to/bar' }
-          ]
-        });
-        this.suggestionArea.render(this.$el);
-      });
-
-      it('adds the new image as the first suggestion item', function() {
-        expect(this.$el.find('.js-suggestion-item:not(.empty)').length).toBe(3);
-        expect(this.$el.find('.js-suggestion-item').length).toBe(7);
-
-        this.suggestionArea.trigger('image-uploaded', {
-          src: 'newimage',
-          url: 'newimage.fake.com'
-        });
-
-        const firstSuggestion = $(this.$el.find('.js-suggestion-item')[0]);
-        const secondSuggestion = $(this.$el.find('.js-suggestion-item')[1]);
-
-        expect(firstSuggestion.data('src')).toBe('newimage');
-        expect(firstSuggestion.data('url')).toBe('newimage.fake.com');
-
-        expect(secondSuggestion.data('src')).toBe('blob:cover');
-        expect(secondSuggestion.data('url')).toBe('http://path/to/cover');
-
-        expect(this.$el.find('.js-suggestion-item:not(.empty)').length).toBe(4);
-        expect(this.$el.find('.js-suggestion-item').length).toBe(7);
-      });
-    });
   });
 });

@@ -14,7 +14,6 @@ export default View.extend({
 
     this.on({
       ['image-uploaded']({ src, url }) {
-        const firstSuggestion = this._model.suggestions[0];
         const newSuggestion = {
           src,
           url,
@@ -27,7 +26,7 @@ export default View.extend({
 
         this.render();
       }
-    })
+    });
   },
 
   events: {
