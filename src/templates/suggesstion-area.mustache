@@ -1,5 +1,5 @@
 <div class="suggestion-list js-suggestion-list">
-  {{^suggestions.0.empty}}
+  {{^emptySuggestions}}
     <ul>
       {{#suggestions}}
       <li class="js-suggestion-item suggestion-item{{#active}} active{{/active}}{{#empty}} empty{{/empty}}" data-src="{{src}}" data-url="{{url}}">
@@ -16,5 +16,5 @@
         </div>
       </li>
     </ul>
-  {{/suggestions.0.empty}}
+  {{/emptySuggestions}}
 </div>

@@ -29,6 +29,14 @@ export default View.extend({
     });
   },
 
+  templateData() {
+    const data = this._model;
+
+    return Object.assign({}, {
+      emptySuggestions: !data.suggestions || data.suggestions[0].empty
+    }, data);
+  },
+
   events: {
     click: {
       '.js-upload-btn': ':upload-image',
