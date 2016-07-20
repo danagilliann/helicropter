@@ -9,9 +9,24 @@ export default View.extend({
   mustache: template,
 
   init(model) {
+    this._$activeElement = null;
     this._super(this._padOrTruncateSuggestions(model));
 
-    this._$activeElement = null;
+    this.on({
+      ['image-uploaded']({ src, url }) {
+        const newSuggestion = {
+          src,
+          url,
+          cover: true,
+          active: true
+        };
+
+        this._model.suggestions = [newSuggestion].concat(this._model.suggestions);
+        this._model = this._padOrTruncateSuggestions(this._model);
+
+        this.render();
+      }
+    });
   },
 
   events: {
@@ -37,7 +52,7 @@ export default View.extend({
       }
     }
     else {
-      model.suggestions = model.suggestions.slice(0, 7);
+      model.suggestions = model.suggestions.slice(0, this._maxSuggestions);
     }
 
     return model;

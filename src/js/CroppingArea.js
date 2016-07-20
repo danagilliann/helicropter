@@ -122,8 +122,8 @@ export default View.extend({
     if (!this._image) { return; }
 
     return {
-      x: (this._getImageProp('left') * -1) + this._getCropAreaProp('left'),
-      y: (this._getImageProp('top') * -1) + this._getCropAreaProp('top'),
+      x: Math.max(0, (this._getImageProp('left') * -1) + this._getCropAreaProp('left')),
+      y: Math.max(0, (this._getImageProp('top') * -1) + this._getCropAreaProp('top')),
       width: this._cropArea.getWidth(),
       height: this._cropArea.getHeight(),
       scale: this._image.getScaleX()

@@ -192,9 +192,9 @@ const HelicropterView = View.extend({
 
     if (this._model.get('showSuggestions')) {
       this._uploadArea.relay(this._suggestionArea, 'upload-image');
+      this._suggestionArea.relay(this._uploadArea, 'image-uploaded');
 
       this.on('remove-image', () => this._suggestionArea.reset());
-      this._uploadArea.on('set-image', () => this._suggestionArea.reset());
       this._suggestionArea.on('set-image', ({ url, src }) => {
         this._url = url;
         this._src = src;
