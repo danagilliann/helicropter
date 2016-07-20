@@ -125,6 +125,10 @@ export default View.extend({
     this._uploader.choose();
   },
 
+  _URL() {
+    return window.URL || window.webkitURL;
+  },
+
   _bindUploader() {
     this.listenTo(this._uploader, {
       submit() {
@@ -140,7 +144,9 @@ export default View.extend({
           this.hide();
           this._url = `${uploadEndpoint}/${uploadPath}`;
 
-          this.trigger('image-uploaded', { src: file.readerData.result, url: this._url });
+          const src = this._URL().createObjectURL(file);
+
+          this.trigger('image-uploaded', { src, url: this._url });
         }
       },
 

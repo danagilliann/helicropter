@@ -66,4 +66,29 @@ describe('UploadArea', function() {
 
     expect($('.js-image-upload-subtext')).toHaveText('foobar');
   });
+
+  describe('upload completion', function() {
+    it('creates a blob URL for the uploaded image', function(done) {
+      this.uploadArea = this.create();
+
+      spyOn(this.uploadArea, '_URL').and.returnValue({
+        createObjectURL: () => 'acoolblob'
+      });
+
+      this.uploadArea.on('image-uploaded', function({ src, url }) {
+        expect(src).toEqual('acoolblob');
+        expect(url).toEqual('endpoint/path');
+        done();
+      });
+
+      this.uploadArea._uploader.trigger('complete', {
+        file: 'foo',
+        uploadEndpoint: 'endpoint',
+        uploadPath: 'path',
+        response: {
+          success: true
+        }
+      })
+    });
+  });
 });
