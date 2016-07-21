@@ -250,7 +250,7 @@ export default View.extend({
       width: null,
       height: null,
       scale: minScale,
-      minScale: minScale
+      minScale
     }, coordinates);
 
     if (coordinates.width === null && coordinates.height === null) {

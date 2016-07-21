@@ -1,9 +1,7 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
-var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');
-var stylish = require('gulp-jscs-stylish');
+var eslint = require('gulp-eslint');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var livereload = require('gulp-livereload');
@@ -33,11 +31,9 @@ gulp.task("webpack", ['js:lint'], function(cb) {
 
 gulp.task('js:lint', function() {
   return gulp.src('./src/js/**/*.js')
-  .pipe(jshint())
-  .pipe(jscs())
-  .on('error', noop)
-  .pipe(stylish.combineWithHintResults())
-  .pipe(jshint.reporter('jshint-stylish'));
+  .pipe(eslint())
+  .pipe(eslint.format())
+  .pipe(eslint.failAfterError());
 });
 
 gulp.task('sass', function() {

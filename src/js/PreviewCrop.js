@@ -5,7 +5,7 @@ import uploadIcon from 'hgn!../templates/icons/upload';
 
 const proportion = 0.5;
 
-export {proportion};
+export { proportion };
 
 export default View.extend({
   mustache,
@@ -40,7 +40,7 @@ export default View.extend({
     this._$canvas.addClass('hide');
   },
 
-  renderImage({image, scale, top, left, cropWidth, cropHeight}) {
+  renderImage({ image, scale, top, left, cropWidth, cropHeight }) {
     this._$upload.addClass('hide');
 
     // Setting canvas width and height happens here rather than init because only at this point
@@ -49,13 +49,13 @@ export default View.extend({
 
     return this._loadImage(image)
     .then(() => {
-      this.on('scaling', ({scale, left, top}) => {
+      this.on('scaling', ({ scale, left, top }) => {
         this._scale(scale);
-        this._adjustImagePosition({left, top});
+        this._adjustImagePosition({ left, top });
       });
 
       this._scale(scale);
-      this._adjustImagePosition({top, left});
+      this._adjustImagePosition({ top, left });
     });
   },
 
@@ -69,7 +69,7 @@ export default View.extend({
     .empty();
   },
 
-  _adjustImagePosition({left, top}) {
+  _adjustImagePosition({ left, top }) {
     this._$image.css('left', proportion * left);
     this._$image.css('top', proportion * top);
   },

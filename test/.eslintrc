@@ -1,5 +1,8 @@
 {
-  "extends": "../../.jshintrc",
+  "extends": "../.eslintrc",
+  "env": {
+    "jasmine": true
+  },
   "globals": {
     "require": true,
     "define": true,
