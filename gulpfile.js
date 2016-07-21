@@ -1,9 +1,6 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var plumber = require('gulp-plumber');
-var jshint = require('gulp-jshint');
-var jscs = require('gulp-jscs');
-var stylish = require('gulp-jscs-stylish');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var livereload = require('gulp-livereload');
@@ -14,7 +11,7 @@ var webpack = require('webpack');
 var webpackConfig = require('./webpack.config');
 
 var webpackInst = webpack(webpackConfig);
-gulp.task("webpack", ['js:lint'], function(cb) {
+gulp.task("webpack", function(cb) {
   webpackInst.run(function(err, stats) {
     if (err) {
       throw new gutil.PluginError("webpack", err);
@@ -29,15 +26,6 @@ gulp.task("webpack", ['js:lint'], function(cb) {
 
     cb();
   });
-});
-
-gulp.task('js:lint', function() {
-  return gulp.src('./src/js/**/*.js')
-  .pipe(jshint())
-  .pipe(jscs())
-  .on('error', noop)
-  .pipe(stylish.combineWithHintResults())
-  .pipe(jshint.reporter('jshint-stylish'));
 });
 
 gulp.task('sass', function() {
@@ -55,5 +43,3 @@ gulp.task('watch', ['webpack', 'sass'], function() {
 
   gulp.watch(['dist/**/*']).on('change', livereload.changed);
 });
-
-gulp.task('test', ['js:lint']);

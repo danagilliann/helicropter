@@ -24,7 +24,6 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
 
     files: [
-      'test/lib/polyfills.js',
       './node_modules/jquery/dist/jquery.js',
       './node_modules/jasmine-jquery/lib/jasmine-jquery.js',
       './node_modules/jasmine-fixture/dist/jasmine-fixture.js',

@@ -1,5 +1,8 @@
 {
-  "extends": "../../.jshintrc",
+  "extends": "../.eslintrc",
+  "env": {
+    "jasmine": true
+  },
   "globals": {
     "require": true,
     "define": true,
@@ -11,6 +14,8 @@
     "spyOn": true,
     "beforeEach": true,
     "afterEach": true,
-    "affix": true
+    "affix": true,
+    "setFixtures": true,
+    "setStyleFixtures": true
   }
 }

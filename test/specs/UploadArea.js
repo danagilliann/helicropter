@@ -88,7 +88,7 @@ describe('UploadArea', function() {
         response: {
           success: true
         }
-      })
+      });
     });
   });
 });

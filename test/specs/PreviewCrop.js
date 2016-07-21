@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import {proportion, default as PreviewCrop} from 'PreviewCrop';
+import { proportion, default as PreviewCrop } from 'PreviewCrop';
 import images from '../fixtures/images';
 
 function createPreviewCrop($el) {
@@ -54,7 +54,7 @@ describe('PreviewCrop', function() {
         width: this.imageData.cropWidth * proportion + 'px',
         height: this.imageData.cropHeight * proportion + 'px'
       });
-    })
+    });
   });
 
   describe('when notified of movement from the main image', function() {
@@ -88,7 +88,6 @@ describe('PreviewCrop', function() {
     });
 
     it('also scales the preview', function() {
-      const oldScale = 1;
       const oldWidth = this.previewCrop._$image.width();
 
       this.previewCrop.trigger('scaling', this.scaleData);

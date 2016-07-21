@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import SuggestionArea from 'SuggestionArea';
 
 function createSuggestionArea($el, data = {}) {

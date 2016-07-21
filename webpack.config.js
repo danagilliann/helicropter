@@ -36,7 +36,11 @@ module.exports = {
     modulesDirectories: ['node_modules']
   },
   module: {
-    loaders: commonLoaders
+    loaders: commonLoaders,
+    preLoaders: [{
+      test: /src\/js\/.*\.js$/,
+      loader: 'eslint-loader'
+    }]
   },
   devtool: 'inline-source-map',
   plugins: [
